@@ -4,27 +4,42 @@ output:
     toc: yes
     toc_float: 
       collapsed: false
-pagetitle: Contact Info
+pagetitle: Austin Daines
 ---
+```{r, echo=FALSE, message=FALSE}
+library(DT)
+library(tidyverse)
+data(mtcars)
+```
 
-### Projects: 
+
+# Projects 
 
 Example Data Analysis Project (easy version) [webpage](https://daisydaines.github.io/example_project/){target="_blank"} 
   
 
 ___
 
-### Course Assignments: 
-
-[Assignment 8]()
-
-
-
-### Contact Info: 
+# Course Work 
+## Assignments
+## Exams
 
 ___
 
-Austin Daines 
+# Contact Info 
 
+Austin Daines 
+<br><br><br><br>
+social media : @daisydaines
+<br><br><br><br>
 austin@daines.net
+
+___
+
+<center>
+![FigName](IMG_4475.jpg)
+</center>
+```{r, echo=FALSE, message=FALSE}
+datatable(mtcars, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T) )
+```
 
