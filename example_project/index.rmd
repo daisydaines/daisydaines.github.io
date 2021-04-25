@@ -76,3 +76,9 @@ Okay, so it appears that for both species, increasing light amount will bring fa
 kableExtra::kable(tidy(mod1))
 
 ```
+
+
+
+
+
+

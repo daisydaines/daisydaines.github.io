@@ -1,9 +1,8 @@
 ---
 output: 
-  html_document: 
-    toc: yes
-    toc_float: 
-      collapsed: false
+  prettydoc::html_pretty:
+    theme: Architect
+    highlight: github
 pagetitle: Austin Daines
 ---
 ```{r, echo=FALSE, message=FALSE}
@@ -11,8 +10,6 @@ library(DT)
 library(tidyverse)
 data(mtcars)
 ```
-
-
 # Projects 
 
 Example Data Analysis Project (easy version) [webpage](https://daisydaines.github.io/example_project/){target="_blank"} 
@@ -23,22 +20,13 @@ ___
 # Course Work 
 ## Assignments
 ## Exams
-
-___
-
-# Contact Info 
-
-Austin Daines 
-<br><br><br><br>
-social media : @daisydaines
-<br><br><br><br>
-austin@daines.net
-
 ___
 
 <center>
 ![FigName](IMG_4475.jpg)
 </center>
+
+___
 ```{r, echo=FALSE, message=FALSE}
 datatable(mtcars, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T) )
 ```

@@ -1,0 +1,16 @@
+---
+title: "About me"
+output: html_document
+---
+```{r}
+
+```
+Austin Daines 
+<br><br><br><br>
+social media : @daisydaines
+<br><br><br><br>
+austin@daines.net
+<br><br><br><br>
+<a href="Resume-3.pdf">Resume</a> 
+
+        
