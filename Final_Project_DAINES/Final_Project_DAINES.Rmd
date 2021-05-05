@@ -1,0 +1,888 @@
+---
+title: "Final_Project_DAINES"
+author: Austin Daines
+date: 
+output: html_document
+---
+
+# $Bball
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(plotly)
+library(dplyr)
+library(tidyverse)
+library(DT)
+library(gapminder)
+```
+
+This project is inspired by <i>Moneyball</i>: The Art of Winning an Unfair Game, a book by Michael Lewis, published in 2003, about the Oakland Athletics baseball team and its general manager Billy Beane. Its focus is the team's analytical, evidence-based, sabermetric approach to assembling a competitive baseball team despite Oakland's small budget 
+([Wiki source](https://en.wikipedia.org/wiki/Moneyball)). 
+
+<i>In 2001 the Oakland Athletics team salary was only <b>34 million dollars</b> compared to the league leading <b>112 million dollar</b> New York Yankees. </i>
+
+The discrepancy in team salary is not as drastic in the NBA. 
+
+Here I took a web scraping function from [mbjoseph](https://rdrr.io/github/mbjoseph/bbr/src/R/zzz.R) to scrape NBA team salaries. 
+
+```{r, echo=FALSE}
+# -----------------------------------------------------------------------------
+# maybe_as_numeric
+#
+# https://rdrr.io/github/mbjoseph/bbr/src/R/zzz.R
+
+maybe_as_numeric <- function(x) {
+  # tries to make numeric columns numeric (from char)
+  numeric_x <- suppressWarnings(as.numeric(x))
+  if (!all(is.na(numeric_x))) x <- numeric_x
+  x
+}
+
+# -----------------------------------------------------------------------------
+# empty_string_to_na
+#
+
+empty_string_to_na <- function(x) {
+  # sometimes (especially old datasets), empty values are ""
+  if (class(x) == "character") {
+    res <- ifelse(x == "", NA, x)
+  } else {
+    res <- x
+  }
+  res
+}
+
+# -----------------------------------------------------------------------------
+# clean_colnames
+#
+
+clean_colnames <- function(df) {
+  # clean up column names for a data frame
+  stopifnot(is.data.frame(df))
+  df <- df[!(names(df) == "Rk")] # remove "Rank" column
+  names(df) <- gsub("\\.", "_pct", names(df))
+  names(df) <- gsub("X2", "two_", names(df))
+  names(df) <- gsub("X3", "three_", names(df))
+  names(df) <- tolower(names(df))
+  df
+}
+
+# -----------------------------------------------------------------------------
+# get_hoops_salary
+#
+
+get_hoops_salary <- function(url) {
+  html <- xml2::read_html(url)
+  node <- rvest::html_node(html, "table")
+  table <- rvest::html_table(node, header = TRUE)
+  converted <- lapply(table, maybe_as_numeric)
+  converted <- lapply(converted, empty_string_to_na)
+  df <- as.data.frame(converted, stringsAsFactors = FALSE)
+
+  # select only the columns we need: Team name and X2020.21 salary
+  df <- df %>% dplyr::select(2:3) 
+  
+  # convert salary from chr with $ and ,'s to numeric
+  df$X2020.21 <- as.numeric(gsub('[$,]', '', df$X2020.21))
+  
+  return(df)
+}
+
+# ===========================================================================
+# web scrape hoopshype.com for team salaries
+
+print("Web scraping hoopshype.com/salaries...")
+df_hoops_ts <- get_hoops_salary("https://hoopshype.com/salaries/")
+ts_dim <- dim(df_hoops_ts)
+paste0("Loaded ", ts_dim[1], " team salaries.")
+
+```
+
+Here are the (6) largest team salaries:
+
+```{r, echo=FALSE}
+head(df_hoops_ts)
+```
+
+#### Boxplot of team salary: 
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.width=4, fig.height=6}
+
+ggplot(df_hoops_ts, aes(y=X2020.21/1000000)) +
+  geom_boxplot(aes()) +
+  theme_minimal() +
+  theme(axis.text.x =element_blank()) +
+  ylab("20-21 NBA Team Salaries ($M)")
+  
+```
+
+In 2001 the Oakland A's paid about 1/2 the median MLB team salary. 
+With this in mind we will attempt to build a competitive team with 1/2 the median NBA team salary. Here we see the median team salary in the NBA is roughly $130 million. That leaves us with 65 million dollars to work with. 
+
+### Hypothesis
+
+Similar to baseball, we can create a competitive team with a salary of $65M.
+
+#### What constitutes a competitive team? 
+
+Well, that's not a simple question to answer. We need a team with players who contribute both offensively and defensively. First, we will analyze plus-minus statistics
+
+##### Plus-Minus 
+
++ [Plus-Minus](https://www.nbastuffer.com/analytics101/plus-minus/), a.k.a. +/-, simply keeps track of the net changes in the score when a given player is either on or off the court.
+
+##### Real Plus-Minus 
+
+
++ [Real Plus-Minus](https://www.nbastuffer.com/analytics101/real-plus-minus-rpm/) can be broken down into offensive and defensive metrics:
+
+  + Offensive Real Plus-Minus: (ORPM): Player’s average impact on his team’s offensive performance, by the points scored per 100 offensive possessions.
+
+  + Defensive Real Plus-Minus: (DRPM): Player’s average impact on his team’s defensive performance, by the points allowed per 100 offensive possessions.
+
+
+##### RPM Wins 
+
++ [RPM Wins](http://www.espn.com/nba/statistics/rpm#:~:text=Glossary&text=WINS%3A%20%22RPM%20Wins%22%20provide,his%20number%20of%20possessions%20played.) provide an estimate of the number of wins each player has contributed to his team's win total on the season. RPM Wins include the player's Real Plus-Minus and his number of possessions played.
+
+
+Before analyzing player statistics we need to know how much each player is worth. Let's load individual player salaries. 
+
+```{r, echo=FALSE}
+
+# -----------------------------------------------------------------------------
+# parse_season_table
+#
+
+parse_season_table <- function(table) {
+  duplicated_header_rows <- table$RK == "RK"
+  table <- table[!duplicated_header_rows, ]
+  converted <- lapply(table, maybe_as_numeric)
+  converted <- lapply(converted, empty_string_to_na)
+  df <- as.data.frame(converted, stringsAsFactors = FALSE)
+  
+  # take position {PG, SG, SF, PF, C} from PlayerPos and make a new column called Pos
+  df$POS <- str_split_fixed(df$NAME, ",", 2)[,2]
+  
+  # rename PlayerPos as Player
+  df <- df %>%
+    dplyr::rename(Player = NAME,
+    )
+  
+  # Remove ", PG, SG, SF, PF, C}" from Player
+  df$Player <- gsub("(.*),.*", "\\1", df$Player)
+  
+  
+  return(df)
+}
+
+
+
+# -----------------------------------------------------------------------------
+# get_espn_stats
+#
+
+get_espn_stats <- function() {
+  for (i in 1:14) {
+    if (i == 1) {
+      url <- paste0("http://www.espn.com/nba/statistics/rpm")
+    }
+    else {
+      url <- paste0("http://www.espn.com/nba/statistics/rpm/_/page/", i)
+    }
+    html <- xml2::read_html(url)
+    node <- rvest::html_node(html, "table")
+    table <- rvest::html_table(node, header = TRUE)
+    if (i == 1) {
+      df <- parse_season_table(table)
+    }
+    else {
+      df <- rbind(df, parse_season_table(table))
+    }
+  }  
+  return(df)
+}
+```
+
+```{r, echo=FALSE}
+
+# ===========================================================================
+# web scrape hoopshype.com for player salaries
+
+print("Web scraping hoopshype.com/salaries/players/...")
+df_hoops_ps <- get_hoops_salary("https://hoopshype.com/salaries/players/")
+ps_dim <- dim(df_hoops_ps)
+paste0("Loaded ", ps_dim[1], " player salaries.")
+
+```
+
+#### Boxplot of NBA player salaries:
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE,fig.align='center', fig.width=3, fig.height=5}
+
+ggplot(df_hoops_ps, aes(y=X2020.21/1000000)) +
+  geom_boxplot(aes()) +
+  theme_minimal() +
+  theme(axis.text.x=element_blank()) +
+  ylab("20-21 NBA Player Salaries ($M)")
+
+ps_mean <- mean(df_hoops_ps$X2020.21)
+
+```
+
+<br><br><br><br>
+
+Curious how much your favorite player makes? Search and see!
+```{r, echo=FALSE, message=FALSE}
+datatable(df_hoops_ps, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T) )
+```
+
+<br><br><br><br>
+
+
+```{r, echo=FALSE}
+# ===========================================================================
+# web scrape ESPN stats for GP, MPG, ORPM, DRPM, WINS
+# Split "Name, Pos" into "Player" and "POS"
+
+print("Web scraping espn.com/nba/statistics/...")
+df_espn <- get_espn_stats()
+
+pe_dim <- dim(df_espn)
+paste0("Loaded ", pe_dim[2], " statistics for ", pe_dim[1], " players.")
+
+head(df_espn)
+```
+
+
+```{r, echo=FALSE}
+# Make new dataframe of stats and salaries
+df_players <- dplyr::inner_join(df_espn, df_hoops_ps, by="Player")
+print("Add player salary as final column to player stats" )
+head(df_players)
+#str(df_players)
+```
+
+___
+
+#### Analyzing RPM vs. Salary
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE,out.width=c('50%', '50%'), fig.show='hold'}
+
+ggplot(df_players, aes(x=RPM, y=X2020.21/1000000)) +
+  geom_point(aes(), show.legend=FALSE) +
+  theme_minimal() +
+  xlab("Real Plus-Minus") +
+  ylab("Salary ($M)")
+
+ggplot(df_players, aes(x=RPM, y=X2020.21/1000000, color=MPG, size=MPG)) +
+  geom_point(aes(), alpha = 0.5, show.legend = TRUE) +
+  theme_minimal() +
+  scale_colour_gradientn(colors = rainbow(n=10)) +
+  xlab("Real Plus-Minus") +
+  ylab("Salary ($M)")
+  
+```
+
+#### What's going on? 
+##### The chart on the left is a plain scatterplot mess. On the right we can understand the data a little bit more. <i>In general, players that play more minutes are paid more and have a higher plus/minus.</i> This might make things difficult for us because we need a competitive team that is cheap!
+
+___
+## Time to collect more data
+
+
+Our Plus/Minus stats come from [NBA.com](https://stats.nba.com/stats/leaguedashplayerstats).
+
+Also, we will web scrape the data thanks to some help from our guy [Ashwin](https://towardsdatascience.com/how-scraping-nba-stats-is-cooler-than-michael-jordan-49d7562ce3ef). 
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+
+
+
+# -----------------------------------------------------------------------------
+# get_nba_player_stats
+#
+
+get_nba_player_stats <- function() {
+
+# https://stackoverflow.com/questions/46781563/how-to-obtain-a-json-response-from-the-stats-nba-com-api  
+# https://towardsdatascience.com/how-scraping-nba-stats-is-cooler-than-michael-jordan-49d7562ce3ef  
+  
+  headers = c(
+    `Connection` = 'keep-alive',
+    `Accept` = 'application/json, text/plain, */*',
+    `x-nba-stats-token` = 'true',
+    `X-NewRelic-ID` = 'VQECWF5UChAHUlNTBwgBVw==',
+    `User-Agent` = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.87 Safari/537.36',
+    `x-nba-stats-origin` = 'stats',
+    `Sec-Fetch-Site` = 'same-origin',
+    `Sec-Fetch-Mode` = 'cors',
+    `Referer` = 'https://stats.nba.com/players/shooting/',
+    `Accept-Encoding` = 'gzip, deflate, br',
+    `Accept-Language` = 'en-US,en;q=0.9'
+  )
+  
+  url <- paste0("https://stats.nba.com/stats/leaguedashplayerstats",
+                "?College=",
+                "&Conference=",
+                "&Country=",
+                "&DateFrom=",
+                "&DateTo=",
+                "&Division=",
+                "&DraftPick=",
+                "&DraftYear=",
+                "&GameScope=",
+                "&GameSegment=",
+                "&Height=",
+                "&LastNGames=0",
+                "&LeagueID=00",
+                "&Location=",
+                "&MeasureType=Base",
+                "&Month=0",
+                "&OpponentTeamID=0",
+                "&Outcome=",
+                "&PORound=0",
+                "&PaceAdjust=N",
+                "&PerMode=Totals",
+                "&Period=0",
+                "&PlayerExperience=",
+                "&PlayerPosition=",
+                "&PlusMinus=N",
+                "&Rank=N",
+                "&Season=2020-21",
+                "&SeasonSegment=",
+                "&SeasonType=Regular+Season",
+                "&ShotClockRange=",
+                "&StarterBench=",
+                "&TeamID=0",
+                "&TwoWay=0",
+                "&VsConference=",
+                "&VsDivision=",
+                "&Weight=")
+                
+  res <- httr::GET(url = url, httr::add_headers(.headers=headers))
+  json_resp <- jsonlite::fromJSON(httr::content(res, "text"))
+  frame <- data.frame(json_resp$resultSets$rowSet)
+  df <- data.frame(json_resp$resultSets$rowSet[1])
+  colnames(df) <- json_resp[["resultSets"]][["headers"]][[1]]
+  
+  return(df)
+}
+
+```
+```{r, echo=FALSE}
+# ===========================================================================
+# web scrape nba.com/stats for player general tradition stats
+
+print("Web scraping stats.nba.com/stats/...")
+df_nba <- get_nba_player_stats()
+pn_dim <- dim(df_nba)
+paste0("Loaded ", pn_dim[2], " statistics for ", pn_dim[1], " players.")
+#str(df_nba)
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE }
+df_nba <- df_nba %>%
+    dplyr::rename(Player = PLAYER_NAME,
+    )
+#str(df_nba)
+```
+
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+# convert chr to integer
+df_nba$AGE <- as.integer(df_nba$AGE)
+df_nba$GP <- as.integer(df_nba$GP)
+df_nba$W <- as.integer(df_nba$W)
+df_nba$L <- as.integer(df_nba$L)
+df_nba$FGM <- as.integer(df_nba$FGM)
+df_nba$FGA <- as.integer(df_nba$FGA)
+df_nba$FG3M <- as.integer(df_nba$FG3M)
+df_nba$FG3A <- as.integer(df_nba$FG3A)
+df_nba$FTM <- as.integer(df_nba$FTM)
+df_nba$FTA <- as.integer(df_nba$FTA)
+df_nba$OREB <- as.integer(df_nba$OREB)
+df_nba$DREB <- as.integer(df_nba$DREB)
+df_nba$REB <- as.integer(df_nba$REB)
+df_nba$AST <- as.integer(df_nba$AST)
+df_nba$TOV <- as.integer(df_nba$TOV)
+df_nba$STL <- as.integer(df_nba$STL)
+df_nba$BLK <- as.integer(df_nba$BLK)
+df_nba$BLKA <- as.integer(df_nba$BLKA)
+df_nba$PF <- as.integer(df_nba$PF)
+df_nba$PFD <- as.integer(df_nba$PFD)
+df_nba$PTS <- as.integer(df_nba$PTS)
+df_nba$PLUS_MINUS <- as.integer(df_nba$PLUS_MINUS)
+df_nba$DD2 <- as.integer(df_nba$DD2)
+df_nba$TD3 <- as.integer(df_nba$TD3)
+
+
+# convert chr to numeric
+df_nba$W_PCT <- as.numeric(df_nba$W_PCT)
+df_nba$FG_PCT <- as.numeric(df_nba$FG_PCT)
+df_nba$FG3_PCT <- as.numeric(df_nba$FG3_PCT)
+df_nba$FT_PCT <- as.numeric(df_nba$FT_PCT)
+df_nba$NBA_FANTASY_PTS <- as.numeric(df_nba$NBA_FANTASY_PTS)
+
+
+```
+
+
+Now that we have all the individual player statistics we could ever need to analyze a player's value we will shift over to compile NBA team statistics. 
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE }
+
+# Make new dataframe of stats and salaries
+
+#dim(df_players)
+df_p <- dplyr::inner_join(df_players, df_nba, by="Player")
+#dim(df_p)
+#head(df_p)
+
+```
+
+___
+
+
+```{r, echo=FALSE }
+# -----------------------------------------------------------------------------
+# get_nba_records
+#
+
+get_nba_records <- function() {
+
+  headers = c(
+    `Connection` = 'keep-alive',
+    `Accept` = 'application/json, text/plain, */*',
+    `x-nba-stats-token` = 'true',
+    `X-NewRelic-ID` = 'VQECWF5UChAHUlNTBwgBVw==',
+    `User-Agent` = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.87 Safari/537.36',
+    `x-nba-stats-origin` = 'stats',
+    `Sec-Fetch-Site` = 'same-origin',
+    `Sec-Fetch-Mode` = 'cors',
+    `Referer` = 'https://www.nba.com/',
+    `Accept-Encoding` = 'gzip, deflate, br',
+    `Accept-Language` = 'en-US,en;q=0.9'
+  )
+  
+  url <- paste0("https://stats.nba.com/stats/leaguestandingsv3",
+                "?LeagueID=00",
+                "&Season=2020-21",
+                "&SeasonType=Regular%20Season")
+                
+  res <- httr::GET(url = url, httr::add_headers(.headers=headers))
+  json_resp <- jsonlite::fromJSON(httr::content(res, "text"))
+  frame <- data.frame(json_resp$resultSets$rowSet)
+  df <- data.frame(json_resp$resultSets$rowSet[1])
+  colnames(df) <- json_resp[["resultSets"]][["headers"]][[1]]
+  
+  return(df)
+}
+
+```
+
+
+
+```{r, echo=FALSE}
+# ===========================================================================
+# web scrape ESPN stats for GP, MPG, ORPM, DRPM, WINS
+# Split "Name, Pos" into "Player" and "POS"
+
+print("Web scraping nba.com/standings ...")
+df_tr <- get_nba_records()
+
+#str(df_tr)
+
+tr_dim <- dim(df_tr)
+paste0("Loaded ",tr_dim[2], " stats for ", tr_dim[1], " teams.")
+
+
+# convert chr to integer
+df_tr$WINS <- as.integer(df_tr$WINS)
+df_tr$LOSSES <- as.integer(df_tr$LOSSES)
+
+# convert chr to numeric
+df_tr$WinPCT <- as.numeric(df_tr$WinPCT)
+df_tr$PointsPG <- as.numeric(df_tr$PointsPG)
+df_tr$OppPointsPG <- as.numeric(df_tr$OppPointsPG)
+df_tr$DiffPointsPG <- as.numeric(df_tr$DiffPointsPG)
+
+
+# rename TeamCity as Team
+# rename WINS as W, LOSSES as L
+# rename WinPCT as W_PCT,
+# rename PointsPG = PPG
+# rename OppPointsPG = OppPPG
+df_tr <- df_tr %>% 
+  dplyr::rename(Team = TeamCity,
+                W = WINS,
+                L = LOSSES,
+                W_Pct = WinPCT,
+                PPG = PointsPG,
+                OppPPG = OppPointsPG)
+
+#dim(df_tr)
+
+# select only the columns we need: Team, Team Name, 
+#                                  W, L, and 
+#                                  PPG, OPPG, DiffPPG
+df_tr <- df_tr %>% dplyr::select(Team, TeamName, 
+                                 W, L, 
+                                 PPG:DiffPointsPG) 
+
+#dim(df_tr)
+
+# Note: NBA.com uses the following convention:
+# Team        | Name
+# ------------+--------------
+# LA          | Clippers
+# Los Angeles | Lakers
+#
+# hoopshype.com uses the following convention:
+# Team        
+# -------------
+# LA Clippers
+# LA Lakers
+
+
+# Resolve name issue for 2 LA teams
+df_hoops_ts$Team[df_hoops_ts$Team == "LA Clippers"] <- "LA"
+df_hoops_ts$Team[df_hoops_ts$Team == "LA Lakers"] <- "Los Angeles"
+
+#dim(df_tr)
+
+df_tr <- dplyr::inner_join(df_tr, df_hoops_ts, by="Team")
+#dim(df_tr)
+
+df_t <- df_tr
+t_dim <- dim(df_t)
+paste0("Cleaned and reduced to ",t_dim[2], 
+       " stats (including salary) for ", t_dim[1], " teams.")
+
+#head(df_t)
+```
+###### Why the team stats? 
+These stats will be enable us to test how competitively our team stacks up against other teams in the NBA. 
+
+```{r, echo=FALSE, message=FALSE}
+head(df_t)
+```
+
+___
+
+#### Team Salary vs. Team Wins
+Let's see if spending more money translates to winning more games.   
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE,fig.align='center', fig.width=8, fig.height=6}
+
+ggplot(df_t, aes(x=W, y=X2020.21/1000000, 
+                 color = DiffPointsPG, size = DiffPointsPG)) +
+  geom_point(aes(), show.legend = TRUE) +
+  theme_minimal() +
+  scale_color_gradient(low = "red", high = "green") +
+
+  xlab("Team Wins") +
+  ylab("Team Salary ($M)")
+
+  
+```
+
+
+Looking at the data another way we observe a <b>pattern</b> that might be obvious. 
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE,fig.align='center', fig.width=8, fig.height=6}
+
+ggplot(df_t, aes(x=DiffPointsPG, y=W, 
+                 color = X2020.21/1000000, size = X2020.21/1000000)) +
+  geom_point(aes(), alpha = 1, show.legend = FALSE) +
+  geom_smooth(method='lm') +
+  theme_minimal() +
+  scale_color_gradient(low = "green", high = "red") +
+  xlab("Team DiffPointPG") +
+  ylab("Wins") +
+  guides(color=guide_legend(title="Salary ($M)")) +
+  guides(size=guide_legend(title="Salary ($M)"))
+
+
+  
+```
+
+
+### Wins and DiffPointPG
++ These stats are generally correlated
++ Higher DiffPointPG translates to more Wins
++ However, higher salary doesn't always correlate with more wins
+  + There are lower salary teams with better PPG and Wins!
+
+This finding gives us hope. It opens the door a little bit more for being able to <i>build a winning team</i> on a low budget. 
+
+___
+
+### Now what?
+Well, we have evidence that it is possible to be a competitive team with a lower end budget. Let's see how far we can stretch the limits now that we have all the player and team statistics we need for analysis. 
+
+___
+
+#### First, let's filter out players...
++ With few minutes (we need players!)
++ And a Plus/Minus < 200 (we need good players)
++ With salaries over $15M (we need affordable players)
+
+
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE,fig.align='center', fig.width=8, fig.height=6}
+
+# find highest Plus-Minus players that are affordable
+
+#glimpse(df_p)
+
+df_p2 <- df_p %>% 
+  filter(MPG > 15) %>%
+  filter(PLUS_MINUS > 200) %>%
+  filter(X2020.21 < 15000000) %>%
+  mutate(P_M_PG = PLUS_MINUS / GP.x)
+
+paste0("Now we have ", nrow(df_p2)," players to analyze.")
+
+ggplot(df_p2, aes(x=PLUS_MINUS, y=X2020.21/1000000,
+                  color=MPG, size=MPG)) +
+  geom_point(aes(), show.legend = TRUE) +
+  theme_minimal() +
+  scale_color_gradient(low = "yellow", high = "green") +
+  xlab("Plus/Minus") +
+  ylab("Salary ($M)")
+
+
+
+roster <- df_p2 %>%
+  select(Player, POS, MPG, P_M_PG, X2020.21) %>%
+  arrange(X2020.21)
+
+roster <- roster[1:12, ]
+
+paste0("Here is the composition of the team:")
+table(roster$POS)
+
+paste0("Here is the team:")
+roster
+
+
+
+paste0("The salary is ", round(sum(roster$X2020.21/1000000),1), " M")
+
+```
+
+From the analysis of plus/minus we filtered out a team that is slightly outside of our budget and guard heavy. Not bad for a first attempt. Let's keep going with real plus minus. 
+
+___
+
+#### Attempt 2: let's filter out players...
++ With few minutes (we need players!)
++ And a Real Plus Minus < 1.8 (we need good players)
++ With salaries over $15M (we need affordable players)
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE,fig.align='center', fig.width=8, fig.height=6}
+
+# find highest RPM players that are affordable
+
+df_p3 <- df_p %>% 
+  filter(MPG > 15) %>%
+  filter(RPM > 1.8) %>%
+  filter(X2020.21 < 15000000)
+
+paste0("Now we have ", nrow(df_p3)," players to analyze.")
+
+ggplot(df_p3, aes(x=RPM, y=X2020.21/1000000,
+                  color=MPG, size=MPG)) +
+  geom_point(aes(), show.legend = TRUE) +
+  theme_minimal() +
+  scale_color_gradient(low = "yellow", high = "green") +
+  xlab("Real Plus Minus") +
+  ylab("Salary ($M)")
+
+df_p3table <- df_p3 %>%
+  select(Player, POS, MPG, RPM, X2020.21) %>%
+  arrange(X2020.21)
+
+df_p3table <- df_p3table[1:12, ]
+
+paste0("Here is the composition of the team:")
+table(df_p3table$POS)
+
+paste0("Here is the team:")
+df_p3table
+
+paste0("The salary is ", round(sum(df_p3table$X2020.21/1000000),1), " M")
+
+
+```
+
+From the analysis of real plus/minus, again, we filtered out a team that is slightly outside of our budget, but looking more like a normal lineup. Not bad for a second attempt. Let's keep going with real plus/minus wins. 
+
+
+___
+
+#### Attempt 3: let's filter out players...
++ With few minutes (we need players!)
++ And a RPM WINS < 5 (we need good players)
++ With salaries over $15M (we need affordable players)
+
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE,fig.align='center', fig.width=8, fig.height=6}
+
+# find highest WINS players that are affordable
+
+df_p4 <- df_p %>% 
+  filter(MPG > 15) %>%
+  filter(WINS > 5) %>%
+  filter(X2020.21 < 15000000) %>%
+  mutate(P_M_PG = PLUS_MINUS / GP.x)
+
+paste0("Now we have ", nrow(df_p4)," players to analyze.")
+
+ggplot(df_p4, aes(x=WINS, y=X2020.21/1000000,
+                  color=MPG, size=MPG)) +
+  geom_point(aes(), show.legend = TRUE) +
+  theme_minimal() +
+  scale_color_gradient(low = "yellow", high = "green") +
+  xlab("WINS") +
+  ylab("Salary ($M)")
+
+df_p4table <- df_p4 %>%
+  select(Player, POS, MPG, WINS, X2020.21) %>%
+  arrange(X2020.21)
+
+df_p4table <- df_p4table[1:12, ]
+
+paste0("Here is the composition of the team:")
+table(df_p4table$POS)
+
+paste0("Here is the team:")
+df_p4table
+
+paste0("The salary is ", round(sum(df_p4table$X2020.21/1000000),1), " M")
+
+
+```
+
+#### Ayyoo! 
+
+Now we are in business. Out of the 24 players selected we chose to stick with the 12 players that were the least expensive. This landed us less than $3.5 million above our salary cap. Considering only 4 of 30 NBA teams are under the league salary cap we will consider this a major win. 
+
+
+___
+
+## Now, the real question: 
+### Can this newly created $Bball team compete with current teams?
++ Let's test by pro-rating RPM WINS vs. existing league leaders' RPM WINS
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE,fig.align='center', fig.width=8, fig.height=6}
+
+
+df_t <- df_t %>% 
+  arrange(desc(W))
+
+paste0("The top  team is: ", df_t$Team[1], " with ", df_t$W[1], " wins and ", df_t$L[1], " losses.")
+
+#glimpse(df_p)
+#glimpse(df_t)
+
+df_t1 <- df_p %>%
+  filter(TEAM == "PHX") %>%
+  select(TEAM, Player, GP.x, MPG, PLUS_MINUS, RPM, WINS)
+
+#df_t1
+
+# WINS: "RPM Wins" provide an estimate of the number of wins each player has
+#       contributed to his team's win total on the season. RPM Wins include the
+#       player's Real Plus-Minus and his number of possessions played.
+
+t1_sum_wins <- round(sum(df_t1$WINS))
+
+#paste0(df_t$Team[1], " roster adds up to ", t1_sum_wins, " wins.")
+
+games_played <- df_t$W[1] + df_t$L[1]
+
+# games_played = 64 as of 5/3 6pm Mountain
+
+df_p4table <- df_p4table %>%
+  arrange(desc(WINS))
+
+# pro-rate MPG and hence WINS based on projected minutes
+# use highest WINS players as follows:
+# 1-5 36 min
+# 6-10 12 min
+# 11-12 0 min
+
+df_p4munge <- df_p4table
+
+df_p4munge <- df_p4munge %>%
+  mutate(pr_MPG = 34)
+
+df_p4munge$pr_MPG[4:8] <- 24
+
+df_p4munge$pr_MPG[9:10] <- 9
+
+df_p4munge$pr_MPG[11:12] <- 0
+
+#df_p4munge
+
+df_p4munge <- df_p4munge %>%
+  mutate(pr_WINS = WINS * pr_MPG / MPG)
+
+#df_p4munge
+
+p4_sum_wins <- round(sum(df_p4munge$pr_WINS))
+  
+```
+
+___
+
+#### Our team will play a similar style to other NBA teams:
++ players 1-3 will play 34 minutes per game (mpg),
++ players 4-8 will play 24 mpg,
++ players 9 & 10 will play 9 mpg, 
++ and players 11 & 12 will be reserves. 
+```{r, message=FALSE,warning=FALSE,echo=FALSE,fig.align='center', fig.width=8, fig.height=6}
+
+df_t_new <- df_t %>% 
+  add_row(Team = "SmallMarket", 
+          TeamName = "$Bball",
+          W = p4_sum_wins,
+          L = games_played - p4_sum_wins,  
+          PPG = NA,
+          OppPPG = NA,
+          DiffPointsPG = NA,
+          X2020.21 = sum(df_p4table$X2020.21))
+
+ggplot(df_t_new, aes(x=W, y=X2020.21/1000000, color = W, size = 5)) +
+  geom_point(aes(), show.legend = FALSE) +
+  theme_minimal() +
+  scale_color_gradient(low = "red", high = "green") +
+  xlab("Team Wins") +
+  ylab("Team Salary ($M)")
+
+paste0("Our $Bball team, with a salary of ",
+       round(sum(df_p4table$X2020.21/1000000),1),
+       "M, has a projected W-L record of ", 
+       p4_sum_wins, "-", games_played - p4_sum_wins, 
+       "!!!")
+  
+```
+
+___
+
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+
+## Success! 
+###### We are on track to head into the playoffs as the <b>number 1 overall team</b>! At this rate we may even post the best record of all-time. 
+
+</div>
+
+___

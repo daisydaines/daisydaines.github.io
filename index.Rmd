@@ -13,7 +13,6 @@ data(mtcars)
 # Projects 
 
 Example Data Analysis Project (easy version) [webpage](https://daisydaines.github.io/example_project/){target="_blank"} 
-  
 
 ___
 
@@ -23,11 +22,7 @@ ___
 ___
 
 <center>
-![FigName](IMG_4475.jpg)
+#![FigName](IMG_4475.jpg)
 </center>
 
-___
-```{r, echo=FALSE, message=FALSE}
-datatable(mtcars, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T) )
-```
 
