@@ -1,11 +1,9 @@
 ---
-title: "Final_Project_DAINES"
+title: "MoneyBball"
 author: Austin Daines
 date: 
 output: html_document
 ---
-
-# $Bball
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -25,6 +23,8 @@ This project is inspired by <i>Moneyball</i>: The Art of Winning an Unfair Game,
 The discrepancy in team salary is not as drastic in the NBA. 
 
 Here I took a web scraping function from [mbjoseph](https://rdrr.io/github/mbjoseph/bbr/src/R/zzz.R) to scrape NBA team salaries. 
+
++ Web scraping hoopshype.com/salaries...
 
 ```{r, echo=FALSE}
 # -----------------------------------------------------------------------------
@@ -92,7 +92,7 @@ get_hoops_salary <- function(url) {
 # ===========================================================================
 # web scrape hoopshype.com for team salaries
 
-print("Web scraping hoopshype.com/salaries...")
+#print("Web scraping hoopshype.com/salaries...")
 df_hoops_ts <- get_hoops_salary("https://hoopshype.com/salaries/")
 ts_dim <- dim(df_hoops_ts)
 paste0("Loaded ", ts_dim[1], " team salaries.")
@@ -146,6 +146,7 @@ Well, that's not a simple question to answer. We need a team with players who co
 
 + [RPM Wins](http://www.espn.com/nba/statistics/rpm#:~:text=Glossary&text=WINS%3A%20%22RPM%20Wins%22%20provide,his%20number%20of%20possessions%20played.) provide an estimate of the number of wins each player has contributed to his team's win total on the season. RPM Wins include the player's Real Plus-Minus and his number of possessions played.
 
+___
 
 Before analyzing player statistics we need to know how much each player is worth. Let's load individual player salaries. 
 
@@ -205,12 +206,15 @@ get_espn_stats <- function() {
 }
 ```
 
+
++ Web scraping hoopshype.com/salaries/players/...
+
 ```{r, echo=FALSE}
 
 # ===========================================================================
 # web scrape hoopshype.com for player salaries
 
-print("Web scraping hoopshype.com/salaries/players/...")
+#print("Web scraping hoopshype.com/salaries/players/...")
 df_hoops_ps <- get_hoops_salary("https://hoopshype.com/salaries/players/")
 ps_dim <- dim(df_hoops_ps)
 paste0("Loaded ", ps_dim[1], " player salaries.")
@@ -233,20 +237,22 @@ ps_mean <- mean(df_hoops_ps$X2020.21)
 
 <br><br><br><br>
 
-Curious how much your favorite player makes? Search and see!
+##### Curious how much your favorite player is being paid this season? Search and see!
+
 ```{r, echo=FALSE, message=FALSE}
 datatable(df_hoops_ps, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T) )
 ```
 
 <br><br><br><br>
 
++ Web scraping espn.com/nba/statistics/...
 
 ```{r, echo=FALSE}
 # ===========================================================================
 # web scrape ESPN stats for GP, MPG, ORPM, DRPM, WINS
 # Split "Name, Pos" into "Player" and "POS"
 
-print("Web scraping espn.com/nba/statistics/...")
+#print("Web scraping espn.com/nba/statistics/...")
 df_espn <- get_espn_stats()
 
 pe_dim <- dim(df_espn)
@@ -255,11 +261,12 @@ paste0("Loaded ", pe_dim[2], " statistics for ", pe_dim[1], " players.")
 head(df_espn)
 ```
 
+Add player salary as final column to player stats
 
 ```{r, echo=FALSE}
 # Make new dataframe of stats and salaries
 df_players <- dplyr::inner_join(df_espn, df_hoops_ps, by="Player")
-print("Add player salary as final column to player stats" )
+#print("Add player salary as final column to player stats" )
 head(df_players)
 #str(df_players)
 ```
