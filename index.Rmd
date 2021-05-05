@@ -13,26 +13,14 @@ data(mtcars)
 
 ___
 
-Final Project  
-
-
-
+# Final Project  
 
 ___
 
-# Projects 
+## Projects 
 
 Example Data Analysis Project (easy version) [webpage](https://daisydaines.github.io/example_project/){target="_blank"} 
 
 ___
-
-# Course Work 
-## Assignments
-## Exams
-___
-
-<center>
-#![FigName](IMG_4475.jpg)
-</center>
 
 
