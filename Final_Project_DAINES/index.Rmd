@@ -286,7 +286,9 @@ ggplot(df_players, aes(x=RPM, y=X2020.21/1000000, color=MPG, size=MPG)) +
 ```
 
 #### What's going on? 
-##### The chart on the left is a plain scatterplot mess. On the right we can understand the data a little bit more. <i>In general, players that play more minutes are paid more and have a higher plus/minus.</i> This might make things difficult for us because we need a competitive team that is cheap!
+The chart on the left is a plain scatterplot mess. On the right we can understand the data a little bit more. 
+
++ In general, <i>players that <b>play more</b> minutes are <b>paid more</b> and have a <b>higher plus/minus</b>.</i> This might make things difficult for us because we need a competitive team that is cheap!
 
 ___
 ## Time to collect more data
@@ -295,6 +297,8 @@ ___
 Our Plus/Minus stats come from [NBA.com](https://stats.nba.com/stats/leaguedashplayerstats).
 
 Also, we will web scrape the data thanks to some help from our guy [Ashwin](https://towardsdatascience.com/how-scraping-nba-stats-is-cooler-than-michael-jordan-49d7562ce3ef). 
+
++ Web scraping stats.nba.com/stats/...
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE}
 
@@ -375,7 +379,7 @@ get_nba_player_stats <- function() {
 # ===========================================================================
 # web scrape nba.com/stats for player general tradition stats
 
-print("Web scraping stats.nba.com/stats/...")
+#print("Web scraping stats.nba.com/stats/...")
 df_nba <- get_nba_player_stats()
 pn_dim <- dim(df_nba)
 paste0("Loaded ", pn_dim[2], " statistics for ", pn_dim[1], " players.")
@@ -485,13 +489,15 @@ get_nba_records <- function() {
 ```
 
 
++ Web scraping nba.com/standings...
+
 
 ```{r, echo=FALSE}
 # ===========================================================================
 # web scrape ESPN stats for GP, MPG, ORPM, DRPM, WINS
 # Split "Name, Pos" into "Player" and "POS"
 
-print("Web scraping nba.com/standings ...")
+#print("Web scraping nba.com/standings ...")
 df_tr <- get_nba_records()
 
 #str(df_tr)
@@ -564,7 +570,8 @@ paste0("Cleaned and reduced to ",t_dim[2],
 
 #head(df_t)
 ```
-###### Why the team stats? 
+
+##### Why the team stats? 
 These stats will be enable us to test how competitively our team stacks up against other teams in the NBA. 
 
 ```{r, echo=FALSE, message=FALSE}
@@ -590,8 +597,12 @@ ggplot(df_t, aes(x=W, y=X2020.21/1000000,
   
 ```
 
+<br><br><br><br>
 
 Looking at the data another way we observe a <b>pattern</b> that might be obvious. 
+<br><br><br><br>
+
+#### Team Wins vs. Team Diff PPG
 
 ```{r, message=FALSE,warning=FALSE,echo=FALSE,fig.align='center', fig.width=8, fig.height=6}
 
@@ -770,7 +781,7 @@ paste0("The salary is ", round(sum(df_p4table$X2020.21/1000000),1), " M")
 
 #### Ayyoo! 
 
-Now we are in business. Out of the 24 players selected we chose to stick with the 12 players that were the least expensive. This landed us less than $3.5 million above our salary cap. Considering only 4 of 30 NBA teams are under the league salary cap we will consider this a major win. 
+Now we are in business. Out of the 24 players selected we chose to stick with the 12 players that were the least expensive. This landed us less than $3.5 million outside our goal. 
 
 
 ___
