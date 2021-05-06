@@ -684,17 +684,33 @@ roster <- df_p2 %>%
 
 roster <- roster[1:12, ]
 
-paste0("Here is the composition of the team:")
-table(roster$POS)
+#paste0("Here is the composition of the team:")
+#table(roster$POS)
 
-paste0("Here is the team:")
-roster
+#paste0("Here is the team:")
+#roster
 
-
-
-paste0("The salary is ", round(sum(roster$X2020.21/1000000),1), " M")
+#paste0("The salary is ", round(sum(roster$X2020.21/1000000),1), " M")
 
 ```
+
+Here is the composition of the team: 
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+table(roster$POS)
+```
+
+
+Here is the team: 
+```{r, message=FALSE,warning=FALSE,echo=FALSE}
+roster
+```
+
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE}
+paste0("The salary is ", round(sum(roster$X2020.21/1000000),1), " M")
+```
+
 
 From the analysis of plus/minus we filtered out a team that is slightly outside of our budget and guard heavy. Not bad for a first attempt. Let's keep going with real plus minus. 
 
@@ -730,16 +746,34 @@ df_p3table <- df_p3 %>%
 
 df_p3table <- df_p3table[1:12, ]
 
-paste0("Here is the composition of the team:")
-table(df_p3table$POS)
+#paste0("Here is the composition of the team:")
+#table(df_p3table$POS)
 
-paste0("Here is the team:")
-df_p3table
+#paste0("Here is the team:")
+#df_p3table
 
-paste0("The salary is ", round(sum(df_p3table$X2020.21/1000000),1), " M")
+#paste0("The salary is ", round(sum(df_p3table$X2020.21/1000000),1), " M")
 
 
 ```
+
+Here is the composition of the team:
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE}
+table(df_p3table$POS)
+```
+
+Here is the team:
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE}
+df_p3table
+```
+
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE}
+paste0("The salary is ", round(sum(df_p3table$X2020.21/1000000),1), " M")
+```
+
 
 From the analysis of real plus/minus, again, we filtered out a team that is slightly outside of our budget, but looking more like a normal lineup. Not bad for a second attempt. Let's keep going with real plus/minus wins. 
 
@@ -778,21 +812,36 @@ df_p4table <- df_p4 %>%
 
 df_p4table <- df_p4table[1:12, ]
 
-paste0("Here is the composition of the team:")
-table(df_p4table$POS)
+#paste0("Here is the composition of the team:")
+#table(df_p4table$POS)
 
-paste0("Here is the team:")
-df_p4table
+#paste0("Here is the team:")
+#df_p4table
 
-paste0("The salary is ", round(sum(df_p4table$X2020.21/1000000),1), " M")
+#paste0("The salary is ", round(sum(df_p4table$X2020.21/1000000),1), " M")
 
 
 ```
 
+Here is the composition of the team:
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE}
+table(df_p4table$POS)
+```
+
+Here is the team:
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE}
+df_p4table
+```
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE}
+paste0("The salary is ", round(sum(df_p4table$X2020.21/1000000),1), " M")
+```
+
 ### Ayyoo! 
 
-Now we are in business. Out of the 24 players selected we chose to stick with the 12 players that were the least expensive. As of May 6th, we beat our goal by $3.6 million.  
-
+Now we are in business. Out of the 24 players selected we chose to stick with the 12 players that were the least expensive. As of May 6th, we beat our goal by $3.6 million. This is subject to change because the web scraping pulls live data and the season is still underway. 
 
 ___
 
@@ -867,7 +916,8 @@ ___
 + players 4-8 will play 24 mpg,
 + players 9 & 10 will play 9 mpg, 
 + and players 11 & 12 will be reserves. 
-```{r, message=FALSE,warning=FALSE,echo=FALSE,fig.align='center', fig.width=8, fig.height=6}
+
+```{r echo=FALSE, fig.align='center', fig.height=6, fig.width=8, message=FALSE, warning=FALSE, include = FALSE}
 
 df_t_new <- df_t %>% 
   add_row(Team = "SmallMarket", 
@@ -892,6 +942,47 @@ paste0("Our $Bball team, with a salary of ",
        p4_sum_wins, "-", games_played - p4_sum_wins, 
        "!!!")
   
+```
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE,fig.align='center', fig.width=8, fig.height=6}
+
+m <- df_t_new[which.max(df_t_new$W), ]
+
+ann <- list(
+  x = m$W,
+  y = round(m$X2020.21/1000000),
+  text = m$Team,
+  xref = "x",
+  yref = "y",
+  showarrow = TRUE,
+  arrowhead = 7,
+  ax = 20,
+  ay = -40
+)
+
+
+pl <- plot_ly(df_t_new, x= ~W, y= ~X2020.21/1000000, 
+              type = 'scatter', mode = 'markers',
+              hoverinfo  = 'text',
+              text = ~paste('</br>Team: ', Team,
+                            '</br>Wins: ', W,
+                            '</br>Salary: ', round(X2020.21/1000000,1), 'M')
+              )
+pl <- pl %>% layout(title = 'Team Wins and Salaries',
+                    xaxis = list(title = 'Wins'),
+                    yaxis = list(title = 'Salary ($M)')
+                    )
+pl <- pl %>% add_markers()
+pl <- pl %>% layout(annotations = ann)
+
+pl
+
+paste0("Our $Bball team, with a salary of ",
+       round(sum(df_p4table$X2020.21/1000000),1),
+       "M, has a projected W-L record of ", 
+       p4_sum_wins, "-", games_played - p4_sum_wins, 
+       "!!!")
+
 ```
 
 ___
