@@ -18,7 +18,7 @@ library(DT)
 library(gapminder)
 ```
 
-This project is inspired by <i>Moneyball</i>: The Art of Winning an Unfair Game, a book by Michael Lewis, published in 2003, about the Oakland Athletics baseball team and its general manager Billy Beane. Its focus is the team's analytical, evidence-based, sabermetric approach to assembling a competitive baseball team despite Oakland's small budget 
+This project is inspired by <i>Moneyball:</i> The Art of Winning an Unfair Game, a book by Michael Lewis, published in 2003, about the Oakland Athletics baseball team and its general manager Billy Beane. Its focus is the team's analytical, evidence-based, sabermetric approach to assembling a competitive baseball team despite Oakland's small budget 
 ([Wiki source](https://en.wikipedia.org/wiki/Moneyball)). 
 
 <i>In 2001 the Oakland Athletics team salary was only <b>34 million dollars</b> compared to the league leading <b>112 million dollar</b> New York Yankees. </i>
@@ -108,7 +108,7 @@ Here are the (6) largest team salaries:
 head(df_hoops_ts)
 ```
 
-#### Boxplot of team salary: 
+### Boxplot of team salary: 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.width=4, fig.height=6}
 
@@ -123,19 +123,19 @@ ggplot(df_hoops_ts, aes(y=X2020.21/1000000)) +
 In 2001 the Oakland A's paid about 1/2 the median MLB team salary. 
 With this in mind we will attempt to build a competitive team with 1/2 the median NBA team salary. Here we see the median team salary in the NBA is roughly $130 million. That leaves us with 65 million dollars to work with. 
 
-### Hypothesis
+## Hypothesis
 
 Similar to baseball, we can create a competitive team with a salary of $65M.
 
-#### What constitutes a competitive team? 
+### What constitutes a competitive team? 
 
 Well, that's not a simple question to answer. We need a team with players who contribute both offensively and defensively. First, we will analyze plus-minus statistics
 
-##### Plus-Minus 
+#### Plus-Minus 
 
 + [Plus-Minus](https://www.nbastuffer.com/analytics101/plus-minus/), a.k.a. +/-, simply keeps track of the net changes in the score when a given player is either on or off the court.
 
-##### Real Plus-Minus 
+#### Real Plus-Minus 
 
 
 + [Real Plus-Minus](https://www.nbastuffer.com/analytics101/real-plus-minus-rpm/) can be broken down into offensive and defensive metrics:
@@ -145,7 +145,7 @@ Well, that's not a simple question to answer. We need a team with players who co
   + Defensive Real Plus-Minus: (DRPM): Player’s average impact on his team’s defensive performance, by the points allowed per 100 offensive possessions.
 
 
-##### RPM Wins 
+#### RPM Wins 
 
 + [RPM Wins](http://www.espn.com/nba/statistics/rpm#:~:text=Glossary&text=WINS%3A%20%22RPM%20Wins%22%20provide,his%20number%20of%20possessions%20played.) provide an estimate of the number of wins each player has contributed to his team's win total on the season. RPM Wins include the player's Real Plus-Minus and his number of possessions played.
 
@@ -224,7 +224,7 @@ paste0("Loaded ", ps_dim[1], " player salaries.")
 
 ```
 
-#### Boxplot of NBA player salaries:
+### Boxplot of NBA player salaries:
 
 ```{r, message=FALSE,warning=FALSE,echo=FALSE,fig.align='center', fig.width=3, fig.height=5}
 
@@ -240,7 +240,7 @@ ps_mean <- mean(df_hoops_ps$X2020.21)
 
 <br><br><br><br>
 
-##### Curious how much your favorite player is being paid this season? Search and see!
+#### Curious how much your favorite player is being paid this season? Search and see!
 
 ```{r, echo=FALSE, message=FALSE}
 datatable(df_hoops_ps, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T) )
@@ -276,7 +276,7 @@ head(df_players)
 
 ___
 
-#### Analyzing RPM vs. Salary
+### Analyzing RPM vs. Salary
 
 ```{r, message=FALSE,warning=FALSE,echo=FALSE,out.width=c('50%', '50%'), fig.show='hold'}
 
@@ -295,7 +295,7 @@ ggplot(df_players, aes(x=RPM, y=X2020.21/1000000, color=MPG, size=MPG)) +
   
 ```
 
-#### What's going on? 
+### What's going on? 
 The chart on the left is a plain scatterplot mess. On the right we can understand the data a little bit more. 
 
 + In general, <i>players that <b>play more</b> minutes are <b>paid more</b> and have a <b>higher plus/minus</b>.</i> This might make things difficult for us because we need a competitive team that is cheap!
@@ -581,7 +581,7 @@ paste0("Cleaned and reduced to ",t_dim[2],
 #head(df_t)
 ```
 
-##### Why the team stats? 
+#### Why the team stats? 
 These stats will be enable us to test how competitively our team stacks up against other teams in the NBA. 
 
 ```{r, echo=FALSE, message=FALSE}
@@ -590,7 +590,7 @@ head(df_t)
 
 ___
 
-#### Team Salary vs. Team Wins
+### Team Salary vs. Team Wins
 Let's see if spending more money translates to winning more games.   
 
 ```{r, message=FALSE,warning=FALSE,echo=FALSE,fig.align='center', fig.width=8, fig.height=6}
@@ -612,7 +612,7 @@ ggplot(df_t, aes(x=W, y=X2020.21/1000000,
 Looking at the data another way we observe a <b>pattern</b> that might be obvious. 
 <br><br><br><br>
 
-#### Team Wins vs. Team Diff PPG
+### Team Wins vs. Team Diff PPG
 
 ```{r, message=FALSE,warning=FALSE,echo=FALSE,fig.align='center', fig.width=8, fig.height=6}
 
@@ -632,7 +632,7 @@ ggplot(df_t, aes(x=DiffPointsPG, y=W,
 ```
 
 
-### Wins and DiffPointPG
+## Wins and DiffPointPG
 + These stats are generally correlated
 + Higher DiffPointPG translates to more Wins
 + However, higher salary doesn't always correlate with more wins
@@ -642,12 +642,12 @@ This finding gives us hope. It opens the door a little bit more for being able t
 
 ___
 
-### Now what?
+## Now what?
 Well, we have evidence that it is possible to be a competitive team with a lower end budget. Let's see how far we can stretch the limits now that we have all the player and team statistics we need for analysis. 
 
 ___
 
-#### First, let's filter out players...
+### First, let's filter out players...
 + With few minutes (we need players!)
 + And a Plus/Minus < 200 (we need good players)
 + With salaries over $15M (we need affordable players)
@@ -700,7 +700,7 @@ From the analysis of plus/minus we filtered out a team that is slightly outside 
 
 ___
 
-#### Attempt 2: let's filter out players...
+### Attempt 2: let's filter out players...
 + With few minutes (we need players!)
 + And a Real Plus Minus < 1.8 (we need good players)
 + With salaries over $15M (we need affordable players)
@@ -746,7 +746,7 @@ From the analysis of real plus/minus, again, we filtered out a team that is slig
 
 ___
 
-#### Attempt 3: let's filter out players...
+### Attempt 3: let's filter out players...
 + With few minutes (we need players!)
 + And a RPM WINS < 5 (we need good players)
 + With salaries over $15M (we need affordable players)
@@ -789,7 +789,7 @@ paste0("The salary is ", round(sum(df_p4table$X2020.21/1000000),1), " M")
 
 ```
 
-#### Ayyoo! 
+### Ayyoo! 
 
 Now we are in business. Out of the 24 players selected we chose to stick with the 12 players that were the least expensive. As of May 6th, we beat our goal by $3.6 million.  
 
@@ -862,7 +862,7 @@ p4_sum_wins <- round(sum(df_p4munge$pr_WINS))
 
 ___
 
-#### Our team will play a similar style to other NBA teams:
+### Our team will play a similar style to other NBA teams:
 + players 1-3 will play 34 minutes per game (mpg),
 + players 4-8 will play 24 mpg,
 + players 9 & 10 will play 9 mpg, 
@@ -901,8 +901,8 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 </style>
 <div class = "blue">
 
-## Success! 
-###### We are on track to head into the playoffs as the <b>number 1 overall team</b>! At this rate we may even post the best record of all-time. 
+# Success! 
+We are on track to head into the playoffs as the <b>number 1 overall team</b>! At this rate we may even post the best record of all-time. 
 
 </div>
 
