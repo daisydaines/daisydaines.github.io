@@ -788,7 +788,7 @@ paste0("The salary is ", round(sum(df_p4table$X2020.21/1000000),1), " M")
 
 #### Ayyoo! 
 
-Now we are in business. Out of the 24 players selected we chose to stick with the 12 players that were the least expensive. This landed us less than $3.5 million outside our goal. 
+Now we are in business. Out of the 24 players selected we chose to stick with the 12 players that were the least expensive. This landed us right where we projected we could be with a competitive team.  
 
 
 ___
@@ -904,3 +904,14 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 </div>
 
 ___
+
+
+
+
+
+
+
+
+
+
+

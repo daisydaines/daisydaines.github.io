@@ -887,3 +887,46 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 
 ___
 
+
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE,fig.align='center', fig.width=8, fig.height=6}
+
+m <- df_t_new[which.max(df_t_new$W), ]
+
+ann <- list(
+  x = m$W,
+  y = round(m$X2020.21/1000000),
+  text = m$Team,
+  xref = "x",
+  yref = "y",
+  showarrow = TRUE,
+  arrowhead = 7,
+  ax = 20,
+  ay = -40
+)
+
+
+pl <- plot_ly(df_t_new, x= ~W, y= ~X2020.21/1000000, 
+              type = 'scatter', mode = 'markers',
+              hoverinfo  = 'text',
+              text = ~paste('</br>Team: ', Team,
+                            '</br>Wins: ', W,
+                            '</br>Salary: ', round(X2020.21/1000000,1), 'M')
+              )
+pl <- pl %>% layout(title = 'Team Wins and Salaries',
+                    xaxis = list(title = 'Wins'),
+                    yaxis = list(title = 'Salary ($M)')
+                    )
+pl <- pl %>% add_markers()
+pl <- pl %>% layout(annotations = ann)
+
+pl
+
+```
+___
+
+
+
+
+
+
