@@ -2,7 +2,10 @@
 title: "MoneyBball"
 author: Austin Daines
 date: 
-output: html_document
+output: 
+  prettydoc::html_pretty:
+    theme: Architect
+    highlight: github
 ---
 
 ```{r setup, include=FALSE}
