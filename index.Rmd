@@ -1,7 +1,7 @@
 ---
 output: 
   prettydoc::html_pretty:
-    theme: Architect
+    theme: architect
     highlight: github
 pagetitle: Austin Daines
 ---
@@ -13,14 +13,27 @@ data(mtcars)
 
 ___
 
-# Final Project  
-[MoneyBball](https://daisydaines.github.io/Final_Project_DAINES/)
+## Final Project  
+
+[Money B-ball](https://daisydaines.github.io/Final_Project_DAINES/)
+
+___
+
+## Classwork 
+
+Data Analysis 
+[course work](https://daisydaines.github.io/uvu_cw/){target="_blank"} 
 
 ___
 
 ## Projects 
 
-Example Data Analysis Project (easy version) [webpage](https://daisydaines.github.io/example_project/){target="_blank"} 
+NCAA Men's Basketball [Transfer Portal](https://daisydaines.github.io/portal/)
+
+
+Idaho State University [Men's Basketball](https://daisydaines.github.io/isu_mbb/){target="_blank"} 
+
+Utah Valley University [Men's Basketball](https://daisydaines.github.io/uvu_mbb/)
 
 ___
 

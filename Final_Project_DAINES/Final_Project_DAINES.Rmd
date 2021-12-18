@@ -150,7 +150,6 @@ Well, that's not a simple question to answer. We need a team with players who co
 Before analyzing player statistics we need to know how much each player is worth. Let's load individual player salaries. 
 
 ```{r, echo=FALSE}
-
 # -----------------------------------------------------------------------------
 # parse_season_table
 #
@@ -203,6 +202,7 @@ get_espn_stats <- function() {
   }  
   return(df)
 }
+
 ```
 
 ```{r, echo=FALSE}
