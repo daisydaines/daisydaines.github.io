@@ -5,11 +5,11 @@ output:
     highlight: github
 pagetitle: Austin Daines
 ---
-```{r, echo=FALSE, message=FALSE}
-library(DT)
-library(tidyverse)
-data(mtcars)
-```
+___
+
+## About Me
+
+[Resume](https://daisydaines.github.io/resume/)
 
 ___
 
@@ -19,7 +19,7 @@ ___
 
 ___
 
-## Classwork 
+## Class Work 
 
 Data Analysis 
 [course work](https://daisydaines.github.io/uvu_cw/){target="_blank"} 

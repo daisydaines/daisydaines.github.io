@@ -1,0 +1,263 @@
+---
+title: "UVU Offense"
+output: 
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+pagetitle: Austin Daines
+---
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+library(modelr)
+library(plyr)
+library(readxl)
+library(dplyr)
+df1 <- read_excel(path = "OFFENSE.xlsx", sheet = "CBU")
+df2 <- read_excel(path = "OFFENSE.xlsx", sheet = "CBU2")
+df3 <- read_excel(path = "OFFENSE.xlsx", sheet = "Seattle")
+df4 <- read_excel(path = "OFFENSE.xlsx", sheet = "Tarleton")
+df5 <- read_excel(path = "OFFENSE.xlsx", sheet = "Tarleton 2")
+df6 <- read_excel(path = "OFFENSE.xlsx", sheet = "Dixie St.")
+df7 <- read_excel(path = "OFFENSE.xlsx", sheet = "Dixie St. 2")
+df8 <- read_excel(path = "OFFENSE.xlsx", sheet = "NMSU")
+df9 <- read_excel(path = "OFFENSE.xlsx", sheet = "NMSU 2")
+df10 <- read_excel(path = "OFFENSE.xlsx", sheet = "UTRGV")
+df11 <- read_excel(path = "OFFENSE.xlsx", sheet = "UTRGV 2")
+df12 <- read_excel(path = "OFFENSE.xlsx", sheet = "GCU")
+df13 <- read_excel(path = "OFFENSE.xlsx", sheet = "GCU 2")
+df14 <- read_excel(path = "OFFENSE.xlsx", sheet = "NMSU3")
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+df1$Opponent <- "CBU"
+df2$Opponent <- "CBU2"
+df3$Opponent <- "SU"
+df4$Opponent <- "TSU"
+df5$Opponent <- "TSU2"
+df6$Opponent <- "DSU"
+df7$Opponent <- "DSU2"
+df8$Opponent <- "NMSU"
+df9$Opponent <- "NMSU2"
+df10$Opponent <- "UTRGV"
+df11$Opponent <- "UTRGV2"
+df12$Opponent <- "GCU"
+df13$Opponent <- "GCU2"
+df14$Opponent <- "NMSU3"
+df2$...8 <- NULL
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+conf <- rbind(df1,df2,df3,df4,df5,df6,df7,df8,df9, df10, df11, df12, df13, df14)
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+names(conf)[7] <- "pts"
+names(conf)[2] <- "passes"
+names(conf)[3] <- "sides"
+
+unique(conf$pts)
+
+conf$pts[conf$pts == "TO"] <- "0"
+conf$pts[conf$pts == "Miss2pt"] <- "0"
+conf$pts[conf$pts == "Miss3pt"] <- "0"
+conf$pts[conf$pts == "Make2pt"] <- "2"
+conf$pts[conf$pts == "Make3pt"] <- "3"
+conf$pts[conf$pts == "miss2"] <- "0"
+conf$pts[conf$pts == "miss3"] <- "0"
+conf$pts[conf$pts == "make2"] <- "2"
+conf$pts[conf$pts == "make3"] <- "3"
+
+conf$pts[conf$pts == "miss2pt"] <- "0"
+conf$pts[conf$pts == "miss3pt"] <- "0"
+conf$pts[conf$pts == "make2pt"] <- "2"
+conf$pts[conf$pts == "miss 2pt"] <- "0"
+conf$pts[conf$pts == "miss23pt"] <- "0"
+conf$pts[conf$pts == "made2"] <- "2"
+conf$pts[conf$pts == "made3"] <- "3"
+
+conf$pts[conf$pts == "Miss23pt"] <- "0"
+conf$pts[conf$pts == "Miss 2pt"] <- "0"
+conf$pts[conf$pts == "FOUL"] <- "1"
+conf$pts[conf$pts == "Shooting foul"] <- "1"
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+new_conf <- conf
+unique(conf$pts)
+class(conf$pts)
+class(conf$passes)
+class(conf$sides)
+
+conf$pts = as.numeric(conf$pts)
+conf$passes = as.numeric(conf$passes)
+conf$sides = as.numeric(conf$sides)
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+pass <- table(new_conf$passes)
+pass <- as.data.frame(pass)
+names(pass)[1] <- 'num_of_passes'
+str(new_conf)
+new_conf$passes <- as.numeric(new_conf$passes)
+
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+#points per number of passes
+half_court <- conf[!(conf$play=="Transition"),]
+half_court <- half_court[ , c("play","passes","sides","pts")]
+
+half_court %>% group_by(passes, sides) %>% 
+    summarize(total_points = sum(pts, na.rm = TRUE))
+
+table(half_court$passes)
+
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(half_court, aes(x=passes)) +
+  geom_bar(color="black", fill="dark green") +
+  theme_minimal() +
+  xlab("\nNumber of Passes") +
+  ylab("Number of Possessions\n") +
+  ggtitle("Passes on Offensive Possessions\n",
+          subtitle = "Conference Games 2020-21 Season") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+```
+
+___
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(half_court, aes(x=sides)) +
+  geom_bar(color="black", fill="dark green") +
+  theme_minimal() +
+  xlab("\nNumber of Sides") +
+  ylab("Number of Possessions\n") +
+  ggtitle("Sides on Offensive Possessions\n",
+          subtitle = "Conference Games 2020-21 Season") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+#points per number of passes
+str(half_court)
+
+half_court[order(half_court$passes, half_court$sides, half_court$pts, decreasing = TRUE),]
+
+?order()
+table(half_court$passes)
+table(half_court$sides)
+
+half_court <- half_court[complete.cases(half_court), ]
+
+sum(half_court[which(half_court$passes=='0'), 4])
+sum(half_court[which(half_court$passes=='1'), 4])
+sum(half_court[which(half_court$passes=='2'), 4])
+sum(half_court[which(half_court$passes=='3'), 4])
+sum(half_court[which(half_court$passes=='4'), 4])
+sum(half_court[which(half_court$passes=='5'), 4])
+sum(half_court[which(half_court$passes=='6'), 4])
+sum(half_court[which(half_court$passes=='7'), 4])
+sum(half_court[which(half_court$passes=='8'), 4])
+sum(half_court[which(half_court$passes=='9'), 4])
+sum(half_court[which(half_court$passes=='10'), 4])
+sum(half_court[which(half_court$passes=='11'), 4])
+
+poss <- table(half_court$passes)
+# 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+# 60, 158, 56, 122, 61, 62, 44, 32, 5, 8, 3, 0
+
+total_pts <- data.frame(passes = c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 
+                        points = c(60, 158, 56, 122, 61, 62, 44, 32, 5, 8, 3))
+poss <- as.data.frame(poss)
+poss <- poss[0:11,]
+ppp <-  round(total_pts$points / poss$Freq, digits = 2)
+
+ppp <- data.frame(passes = c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+                  ppp)
+str(ppp)
+```
+
+
+___
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(ppp, aes(x=passes, y=ppp)) +
+  geom_point(color="dark green") +
+  geom_smooth(method = "lm", fill=NA, color="black") +
+  theme_minimal() +
+  xlab("\nNumber of Passes") +
+  ylab("Points Per Possessions\n") +
+  ggtitle("PPP vs. Passes\n",
+            subtitle = "Conference Games 2020-21 Season") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+#points per number of sides
+sum(half_court[which(half_court$sides=='0'), 4])
+sum(half_court[which(half_court$sides=='1'), 4])
+sum(half_court[which(half_court$sides=='2'), 4])
+sum(half_court[which(half_court$sides=='3'), 4])
+sum(half_court[which(half_court$sides=='4'), 4])
+sum(half_court[which(half_court$sides=='5'), 4])
+sum(half_court[which(half_court$sides=='6'), 4])
+sum(half_court[which(half_court$sides=='7'), 4])
+
+poss_sides <- table(half_court$sides)
+
+total_pts_sides <- data.frame(sides = c(1, 2, 3, 4, 5), 
+                        points = c(153, 202, 141, 76, 32))
+poss_sides <- as.data.frame(poss_sides)
+poss_sides <- poss_sides[2:6,]
+ppp_sides <-  round(total_pts_sides$points / poss_sides$Freq, digits = 2)
+
+ppp_sides <- data.frame(sides = c(1, 2, 3, 4, 5),
+                  ppp_sides)
+
+```
+
+___
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(ppp_sides, aes(x=sides, y=ppp_sides)) +
+  geom_point(color="dark green") +
+  geom_smooth(method = "lm", fill=NA, color="black") +
+  theme_minimal() +
+  xlab("\nNumber of Sides") +
+  ylab("Points Per Possessions\n") +
+  ggtitle("PPP vs. Sides\n",
+          subtitle = "Conference Games 2020-21 Season") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+```
+
+___
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+#points per play
+
+```
+

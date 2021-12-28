@@ -1,0 +1,19 @@
+---
+title: "Resume"
+date: "December 21st, 2021"
+output: 
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+pagetitle: Austin Daines
+---
+
+___
+
+```{r}
+library(knitr)
+knitr::include_graphics("./austin-daines-resume.pdf")
+```
+___
+
+

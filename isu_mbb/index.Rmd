@@ -1,0 +1,1148 @@
+---
+title: "Summer Shooting -- 2021"
+output: 
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+pagetitle: Austin Daines
+---
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+library(tidyverse)
+library(modelr)
+library(plyr)
+library(readxl)
+df1 <- read_excel(path = "Summer Shooting.xlsx", sheet = "Composite")
+df2 <- read_excel(path = "Summer Shooting.xlsx", sheet = "06-14")
+df3 <- read_excel(path = "Summer Shooting.xlsx", sheet = "06-15")
+df4 <- read_excel(path = "Summer Shooting.xlsx", sheet = "06-16")
+df5 <- read_excel(path = "Summer Shooting.xlsx", sheet = "06-17")
+df6 <- read_excel(path = "Summer Shooting.xlsx", sheet = "06-18")
+df7 <- read_excel(path = "Summer Shooting.xlsx", sheet = "06-21")
+df8 <- read_excel(path = "Summer Shooting.xlsx", sheet = "06-22")
+df9 <- read_excel(path = "Summer Shooting.xlsx", sheet = "06-24")
+df10 <- read_excel(path = "Summer Shooting.xlsx", sheet = "06-28")
+df11 <- read_excel(path = "Summer Shooting.xlsx", sheet = "06-29")
+df12 <- read_excel(path = "Summer Shooting.xlsx", sheet = "06-30")
+df13 <- read_excel(path = "Summer Shooting.xlsx", sheet = "07-01")
+df14 <- read_excel(path = "Summer Shooting.xlsx", sheet = "07-02")
+df15 <- read_excel(path = "Summer Shooting.xlsx", sheet = "07-05")
+df16 <- read_excel(path = "Summer Shooting.xlsx", sheet = "07-06")
+df17 <- read_excel(path = "Summer Shooting.xlsx", sheet = "07-09")
+df18 <- read_excel(path = "Summer Shooting.xlsx", sheet = "07-14")
+df19 <- read_excel(path = "Summer Shooting.xlsx", sheet = "07-19")
+df20 <- read_excel(path = "Summer Shooting.xlsx", sheet = "07-20")
+df21 <- read_excel(path = "Summer Shooting.xlsx", sheet = "07-21")
+df22 <- read_excel(path = "Summer Shooting.xlsx", sheet = "07-22")
+df23 <- read_excel(path = "Summer Shooting.xlsx", sheet = "07-23")
+df24 <- read_excel(path = "Summer Shooting.xlsx", sheet = "07-26")
+df25 <- read_excel(path = "Summer Shooting.xlsx", sheet = "07-28")
+df26 <- read_excel(path = "Summer Shooting.xlsx", sheet = "07-30")
+df27 <- read_excel(path = "Summer Shooting.xlsx", sheet = "08-02")
+df28 <- read_excel(path = "Summer Shooting.xlsx", sheet = "08-03")
+df29 <- read_excel(path = "Summer Shooting.xlsx", sheet = "08-04")
+
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+str(df1)
+is.data.frame(df1)
+
+df1$`Team Ave` <- NULL
+df1$...1 <- NULL
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+d2 <- pivot_longer(df2, cols = !"...1", names_to = "Player", values_to = "Shots")
+d3 <- pivot_longer(df3, cols = !"...1", names_to = "Player", values_to = "Shots")
+d4 <- pivot_longer(df4, cols = !"...1", names_to = "Player", values_to = "Shots")
+d5 <- pivot_longer(df5, cols = !"...1", names_to = "Player", values_to = "Shots")
+d6 <- pivot_longer(df6, cols = !"...1", names_to = "Player", values_to = "Shots")
+d7 <- pivot_longer(df7, cols = !"...1", names_to = "Player", values_to = "Shots")
+d8 <- pivot_longer(df8, cols = !"...1", names_to = "Player", values_to = "Shots")
+d9 <- pivot_longer(df9, cols = !"...1", names_to = "Player", values_to = "Shots")
+d10 <- pivot_longer(df10, cols = !"...1", names_to = "Player", values_to = "Shots")
+d11 <- pivot_longer(df11, cols = !"...1", names_to = "Player", values_to = "Shots")
+d12 <- pivot_longer(df12, cols = !"...1", names_to = "Player", values_to = "Shots")
+d13 <- pivot_longer(df13, cols = !"...1", names_to = "Player", values_to = "Shots")
+d14 <- pivot_longer(df14, cols = !"...1", names_to = "Player", values_to = "Shots")
+d15 <- pivot_longer(df15, cols = !"...1", names_to = "Player", values_to = "Shots")
+d16 <- pivot_longer(df16, cols = !"...1", names_to = "Player", values_to = "Shots")
+d17 <- pivot_longer(df17, cols = !"...1", names_to = "Player", values_to = "Shots")
+d18 <- pivot_longer(df18, cols = !"...1", names_to = "Player", values_to = "Shots")
+d19 <- pivot_longer(df19, cols = !"...1", names_to = "Player", values_to = "Shots")
+d20 <- pivot_longer(df20, cols = !"...1", names_to = "Player", values_to = "Shots")
+d21 <- pivot_longer(df21, cols = !"...1", names_to = "Player", values_to = "Shots")
+d22 <- pivot_longer(df22, cols = !"...1", names_to = "Player", values_to = "Shots")
+d23 <- pivot_longer(df23, cols = !"...1", names_to = "Player", values_to = "Shots")
+d24 <- pivot_longer(df24, cols = !"...1", names_to = "Player", values_to = "Shots")
+d25 <- pivot_longer(df25, cols = !"...1", names_to = "Player", values_to = "Shots")
+d26 <- pivot_longer(df26, cols = !"...1", names_to = "Player", values_to = "Shots")
+d27 <- pivot_longer(df27, cols = !"...1", names_to = "Player", values_to = "Shots")
+d28 <- pivot_longer(df28, cols = !"...1", names_to = "Player", values_to = "Shots")
+d29 <- pivot_longer(df29, cols = !"...1", names_to = "Player", values_to = "Shots")
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# june 14
+made_614 <- d2[c(1:17),-c(1)]
+made_614
+is.data.frame(made_614)
+m614 <- "June_14"
+made_614$date <- m614
+made_614
+# june 15
+made_615 <- d3[c(1:17),-c(1)]
+made_615
+is.data.frame(made_615)
+m615 <- "June_15"
+made_615$date <- m615
+made_615
+# june 16
+made_616 <- d4[c(1:17),-c(1)]
+made_616
+is.data.frame(made_616)
+m616 <- "June_16"
+made_616$date <- m616
+made_616
+# june 17
+made_617 <- d5[c(1:17),-c(1)]
+made_617
+is.data.frame(made_617)
+m617 <- "June_17"
+made_617$date <- m617
+made_617
+# june 18
+made_618 <- d6[c(1:17),-c(1)]
+made_618
+is.data.frame(made_618)
+m618 <- "June_18"
+made_618$date <- m618
+made_618
+# june 21
+made_621 <- d7[c(1:17),-c(1)]
+made_621
+is.data.frame(made_621)
+m621 <- "June_21"
+made_621$date <- m621
+made_621
+# june 22
+made_622 <- d8[c(1:17),-c(1)]
+made_622
+is.data.frame(made_622)
+m622 <- "June_22"
+made_622$date <- m622
+made_622
+# june 24
+made_624 <- d9[c(1:17),-c(1)]
+made_624
+is.data.frame(made_624)
+m624 <- "June_24"
+made_624$date <- m624
+made_624
+# june 28
+made_628 <- d10[c(1:17),-c(1)]
+made_628
+is.data.frame(made_628)
+m628 <- "June_28"
+made_628$date <- m628
+made_628
+# june 29
+made_629 <- d11[c(1:17),-c(1)]
+made_629
+is.data.frame(made_629)
+m629 <- "June_29"
+made_629$date <- m629
+made_629
+# june 30
+made_630 <- d12[c(1:17),-c(1)]
+made_630
+is.data.frame(made_630)
+m630 <- "June_30"
+made_630$date <- m630
+made_630
+# july 01
+made_701 <- d13[c(1:17),-c(1)]
+made_701
+is.data.frame(made_701)
+m701 <- "July_01"
+made_701$date <- m701
+made_701
+# july 02 
+made_702 <- d14[c(1:17),-c(1)]
+made_702
+is.data.frame(made_702)
+m702 <- "July_02"
+made_702$date <- m702
+made_702
+# july 05
+made_705 <- d15[c(1:17),-c(1)]
+made_705
+is.data.frame(made_705)
+m705 <- "July_05"
+made_705$date <- m705
+made_705
+# july 06
+made_706 <- d16[c(1:17),-c(1)]
+made_706
+is.data.frame(made_706)
+m706 <- "July_06"
+made_706$date <- m706
+made_706
+# july 09
+made_709 <- d17[c(1:17),-c(1)]
+made_709
+is.data.frame(made_709)
+m709 <- "July_09"
+made_709$date <- m709
+made_709
+# july 14
+made_714 <- d18[c(1:17),-c(1)]
+made_714
+is.data.frame(made_714)
+m714 <- "July_14"
+made_714$date <- m714
+made_714
+# july 19
+made_719 <- d19[c(1:17),-c(1)]
+made_719
+is.data.frame(made_719)
+m719 <- "July_19"
+made_719$date <- m719
+made_719
+# july 20
+made_720 <- d20[c(1:17),-c(1)]
+made_720
+is.data.frame(made_720)
+m720 <- "July_20"
+made_720$date <- m720
+made_720
+# july 21
+made_721 <- d21[c(1:17),-c(1)]
+made_721
+is.data.frame(made_721)
+m721 <- "July_21"
+made_721$date <- m721
+made_721
+# july 22
+made_722 <- d22[c(1:17),-c(1)]
+made_722
+is.data.frame(made_722)
+m722 <- "July_22"
+made_722$date <- m722
+made_722
+# july 23
+made_723 <- d23[c(1:17),-c(1)]
+made_723
+is.data.frame(made_723)
+m723 <- "July_23"
+made_723$date <- m723
+made_723
+# july 26
+made_726 <- d24[c(1:17),-c(1)]
+made_726
+is.data.frame(made_726)
+m726 <- "July_26"
+made_726$date <- m726
+made_726
+# july 28
+made_728 <- d25[c(1:17),-c(1)]
+made_728
+is.data.frame(made_728)
+m728 <- "July_28"
+made_728$date <- m728
+made_728
+# july 30
+made_730 <- d26[c(1:17),-c(1)]
+made_730
+is.data.frame(made_730)
+m730 <- "July_30"
+made_730$date <- m730
+made_730
+# aug 2
+made_802 <- d27[c(1:17),-c(1)]
+made_802
+is.data.frame(made_802)
+m802 <- "Aug_02"
+made_802$date <- m802
+made_802
+# aug 3
+made_803 <- d28[c(1:17),-c(1)]
+made_803
+is.data.frame(made_803)
+m803 <- "Aug_03"
+made_803$date <- m803
+made_803
+# aug 4
+made_804 <- d29[c(1:17),-c(1)]
+made_804
+is.data.frame(made_804)
+m804 <- "Aug_04"
+made_804$date <- m804
+made_804
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+##TAKEN
+
+# june 14
+taken_614 <- d2[c(18:34),-c(1)]
+taken_614
+
+# june 15
+taken_615 <- d3[c(18:34),-c(1)]
+taken_615
+# june 16
+taken_616 <- d4[c(18:34),-c(1)]
+taken_616
+# june 17
+taken_617 <- d5[c(18:34),-c(1)]
+taken_617
+# june 18
+taken_618 <- d6[c(18:34),-c(1)]
+taken_618
+# june 21
+taken_621 <- d7[c(18:34),-c(1)]
+taken_621
+# june 22
+taken_622 <- d8[c(18:34),-c(1)]
+taken_622
+# june 24
+taken_624 <- d9[c(18:34),-c(1)]
+taken_624
+# june 14
+taken_628 <- d10[c(18:34),-c(1)]
+taken_628
+# june 14
+taken_629 <- d11[c(18:34),-c(1)]
+taken_629
+# june 14
+taken_630 <- d12[c(18:34),-c(1)]
+taken_630
+# june 14
+taken_701 <- d13[c(18:34),-c(1)]
+taken_701
+# june 14
+taken_702 <- d14[c(18:34),-c(1)]
+taken_702
+# june 14
+taken_705 <- d15[c(18:34),-c(1)]
+taken_705
+# june 14
+taken_706 <- d16[c(18:34),-c(1)]
+taken_706
+# june 14
+taken_709 <- d17[c(18:34),-c(1)]
+taken_709
+# june 14
+taken_714 <- d18[c(18:34),-c(1)]
+taken_714
+# july 19
+taken_719 <- d19[c(18:34),-c(1)]
+taken_719
+# july 20
+taken_720 <- d20[c(18:34),-c(1)]
+taken_720
+# july 21
+taken_721 <- d21[c(18:34),-c(1)]
+taken_721
+# july 22
+taken_722 <- d22[c(18:34),-c(1)]
+taken_722
+# july 23
+taken_723 <- d23[c(18:34),-c(1)]
+taken_723
+# july 26
+taken_726 <- d24[c(18:34),-c(1)]
+taken_726
+# july 28
+taken_728 <- d25[c(18:34),-c(1)]
+taken_728
+# july 30
+taken_730 <- d26[c(18:34),-c(1)]
+taken_730
+# aug 2
+taken_802 <- d27[c(18:34),-c(1)]
+taken_802
+# aug 3
+taken_803 <- d28[c(18:34),-c(1)]
+taken_803
+# aug 4
+taken_804 <- d29[c(18:34),-c(1)]
+taken_804
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+#---------- Create Player Column
+player <- c("Burgin", "Sorensen", "Cool", "Porter", "Taylor",
+            "Smellie", "Ball", "Carlson", "Carr", "Karstetter", 
+            "Ford", "Rodriguez", "Tamba", "Parker", "Visentin", 
+            "Buzangu", "Stormark")
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+#------------- Create percentages
+p614 <- (made_614[,2]/taken_614[,2]) * 100
+p615 <- (made_615[,2]/taken_615[,2]) * 100
+p616 <- (made_616[,2]/taken_616[,2]) * 100
+p617 <- (made_617[,2]/taken_617[,2]) * 100
+p618 <- (made_618[,2]/taken_618[,2]) * 100
+p621 <- (made_621[,2]/taken_621[,2]) * 100
+p622 <- (made_622[,2]/taken_622[,2]) * 100
+p624 <- (made_624[,2]/taken_624[,2]) * 100
+p628 <- (made_628[,2]/taken_628[,2]) * 100
+p629 <- (made_629[,2]/taken_629[,2]) * 100
+p630 <- (made_630[,2]/taken_630[,2]) * 100
+p701 <- (made_701[,2]/taken_701[,2]) * 100
+p702 <- (made_702[,2]/taken_702[,2]) * 100
+p705 <- (made_705[,2]/taken_705[,2]) * 100
+p706 <- (made_706[,2]/taken_706[,2]) * 100
+p709 <- (made_709[,2]/taken_709[,2]) * 100
+p714 <- (made_714[,2]/taken_714[,2]) * 100
+p719 <- (made_719[,2]/taken_719[,2]) * 100
+p720 <- (made_720[,2]/taken_720[,2]) * 100
+p721 <- (made_721[,2]/taken_721[,2]) * 100
+p722 <- (made_722[,2]/taken_722[,2]) * 100
+p723 <- (made_723[,2]/taken_723[,2]) * 100
+p726 <- (made_726[,2]/taken_726[,2]) * 100
+p728 <- (made_728[,2]/taken_728[,2]) * 100
+p730 <- (made_730[,2]/taken_730[,2]) * 100
+p802 <- (made_802[,2]/taken_802[,2]) * 100
+p803 <- (made_803[,2]/taken_803[,2]) * 100
+p804 <- (made_804[,2]/taken_804[,2]) * 100
+
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+#--------------- Create full df
+p614$player <- player
+p614$date <- "2021-06-14"
+
+p615$player <- player
+p615$date <- "2021-06-15"
+
+p616$player <- player
+p616$date <- "2021-06-16"
+
+p617$player <- player
+p617$date <- "2021-06-17"
+
+p618$player <- player
+p618$date <- "2021-06-18"
+
+p621$player <- player
+p621$date <- "2021-06-21"
+
+p622$player <- player
+p622$date <- "2021-06-22"
+
+p624$player <- player
+p624$date <- "2021-06-24"
+
+p628$player <- player
+p628$date <- "2021-06-28"
+
+p629$player <- player
+p629$date <- "2021-06-29"
+
+p630$player <- player
+p630$date <- "2021-06-30"
+
+p701$player <- player
+p701$date <- "2021-07-01"
+
+p702$player <- player
+p702$date <- "2021-07-02"
+
+p705$player <- player
+p705$date <- "2021-07-05"
+
+p706$player <- player
+p706$date <- "2021-07-06"
+
+p709$player <- player
+p709$date <- "2021-07-09"
+
+p714$player <- player
+p714$date <- "2021-07-14"
+
+p719$player <- player
+p719$date <- "2021-07-19"
+
+p720$player <- player
+p720$date <- "2021-07-20"
+
+p721$player <- player
+p721$date <- "2021-07-21"
+
+p722$player <- player
+p722$date <- "2021-07-22"
+
+p723$player <- player
+p723$date <- "2021-07-23"
+
+p726$player <- player
+p726$date <- "2021-07-26"
+
+p728$player <- player
+p728$date <- "2021-07-28"
+
+p730$player <- player
+p730$date <- "2021-07-30"
+
+p802$player <- player
+p802$date <- "2021-08-02"
+
+p803$player <- player
+p803$date <- "2021-08-03"
+
+p804$player <- player
+p804$date <- "2021-08-04"
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+#---------- bind to make total df
+total <- rbind(p614, p615, p616, p617, p618, p621, p622, p624, p628, p629, p630,
+               p701, p702, p705, p706, p709, p714, p719, p720, p721, p722, p723,
+               p726, p728, p730, p802, p803, p804)
+total
+
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+#--------- change date from character to date
+total$date <- as.Date(total$date)
+str(total)
+```
+
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE, include=FALSE}
+#--------- first plot
+first_plot <- ggplot(total, aes(x=date, y=Shots, color=player)) +
+  geom_line() +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Team\n") +
+  theme(plot.title = element_text(size = 26, face = "bold")) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14)) + 
+  theme(legend.text=element_text(size=12), 
+        legend.title = element_text(size=14, face = "bold"))
+```
+
+
+```{r, message=FALSE,warning=FALSE,echo=FALSE,}
+first_plot
+```
+
+
+```{r,echo= FALSE, message=FALSE,warning=FALSE, include=FALSE}
+#BIGS
+
+BIGS <- total$player %in% c("Parker","Buzangu", "Carlson", "Visentin")
+B <- total[BIGS,]
+B
+str(B)
+B$date <- as.Date(B$date)
+
+bg <- ggplot(B, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5) +
+  #geom_smooth(method = "lm", fill=NA) +
+  geom_point(size=3) +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Bigs\n") +
+  theme(plot.title = element_text(size = 26, face = "bold")) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14)) + 
+  theme(legend.text=element_text(size=12), 
+        legend.title = element_text(size=14, face = "bold"))
+
+bg <- bg + scale_color_manual(breaks = c("Parker", "Buzangu", "Carlson", "Visentin"),
+                        values=c("red", "blue", "green", "orange"))
+```
+
+_____________________________________
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+bg
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# WINGS
+
+WINGS <- total$player %in% c("Rodriguez","Porter", "Karstetter", "Carr", "Taylor", "Smellie")
+W <- total[WINGS,]
+W
+str(W)
+W$date <- as.Date(W$date)
+str(W)
+
+wg <- ggplot(W, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5) +
+  geom_point(size=3) +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Wings\n") +
+  theme(plot.title = element_text(size = 26, face = "bold")) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14)) + 
+  theme(legend.text=element_text(size=12), 
+        legend.title = element_text(size=14, face = "bold"))
+
+wg <- wg + scale_color_manual(breaks = c("Rodriguez","Porter", "Karstetter", "Carr", "Taylor", "Smellie"),
+                        values=c("red", "blue", "green", "orange", "yellow", "black"))
+```
+
+_____________________________________
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+wg
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+#GUARDS
+
+GUARDS <- total$player %in% c("Burgin", "Sorensen", "Cool", "Ball", "Ford")
+G <- total[GUARDS,]
+G
+str(G)
+G$date <- as.Date(G$date)
+
+gg <- ggplot(G, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5) +
+  geom_point(size=3) +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Guards\n") +
+  theme(plot.title = element_text(size = 26, face = "bold")) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14)) + 
+  theme(legend.text=element_text(size=12), 
+        legend.title = element_text(size=14, face = "bold"))
+
+gg <- gg + scale_color_manual(breaks = c("Burgin", "Sorensen", "Cool", "Ball", "Ford"),
+                        values=c("red", "blue", "green", "orange", "black"))
+
+```
+
+_____________________________________
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+gg
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include= FALSE}
+# 0 - Burgin
+Burgin <- total$player %in% c("Burgin")
+AJB <- total[Burgin,]
+AJB
+str(AJB)
+AJB$date <- as.Date(AJB$date)
+
+AJB$Shots <- round(AJB$Shots, digits = 1)
+
+aj <- ggplot(AJB, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5, color= "orange") +
+  geom_text(data=subset(AJB, Shots > 80),
+            aes(label=Shots),hjust=-0.25, vjust=0, color="black", size=2.75) + 
+  geom_point(size=3, color="orange") +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Burgin #0\n",
+          subtitle = "AJ Burgin | Freshman | SG | San Diego, CA") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+
+```
+
+___
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+aj
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# 1 - Sorensen
+Sorensen <- total$player %in% c("Sorensen")
+LCS <- total[Sorensen,]
+LCS
+str(LCS)
+LCS$date <- as.Date(LCS$date)
+
+LCS$Shots <- round(LCS$Shots, digits = 1)
+
+ls <- ggplot(LCS, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5, color="orange") +
+  geom_smooth(method = "lm", fill=NA, color="black") +
+  geom_text(data=subset(LCS, Shots > 80),
+            aes(label=Shots),hjust=1.35, vjust=0.25, color="black", size=2.75) + 
+  geom_point(size=3, color="orange") +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Sorensen #1\n",
+          subtitle = "Liam Sorensen | Freshman | PG | Hadlum, Denmark") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+
+```
+
+___
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+ls
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# 2 - Cool
+Cool <- total$player %in% c("Cool")
+TC <- total[Cool,]
+TC
+str(TC)
+TC$date <- as.Date(TC$date)
+
+TC$Shots <- round(TC$Shots, digits = 1)
+
+tc <- ggplot(TC, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5, color="orange") +
+  geom_text(data=subset(TC, Shots > 72),
+            aes(label=Shots),hjust=-0.25, vjust=0.25, color= "black",size=2.75) + 
+  geom_point(size=3, color="orange") +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Cool #2\n",
+          subtitle = "Tarik Cool | Senior | PG | Chandler, Arizona") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+
+```
+
+___
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+tc
+```
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# 3 - Porter
+Porter <- total$player %in% c("Porter")
+MP <- total[Porter,]
+MP
+str(MP)
+MP$date <- as.Date(MP$date)
+
+MP$Shots <- round(MP$Shots, digits = 1)
+
+mp <- ggplot(MP, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5, color="orange") +
+  geom_text(data=subset(MP, Shots > 60),
+            aes(label=Shots),hjust=-0.25, vjust=0, color="black", size=2.75) + 
+  geom_point(size=3, color="orange") +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Porter #3\n",
+          subtitle = "Malik Porter | Senior | PF | Phoenix, Arizona") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+
+```
+
+___
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+mp
+```
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# 4 - Taylor III
+Taylor <- total$player %in% c("Taylor")
+ET <- total[Taylor,]
+ET
+str(ET)
+ET$date <- as.Date(ET$date)
+
+ET$Shots <- round(ET$Shots, digits = 1)
+
+et <- ggplot(ET, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5, color="orange") +
+  geom_text(data=subset(ET, Shots > 86), 
+            aes(label=Shots),hjust=-0.25, vjust=0, color= "black", size=2.75) + 
+  geom_point(size=3, color="orange") +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Taylor #4\n",
+          subtitle = "Emmit Taylor III | Junior | SG | Lapwai, Idaho") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+
+```
+
+___
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+et
+```
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# 5 - Smellie
+Smellie <- total$player %in% c("Smellie")
+AS <- total[Smellie,]
+AS
+str(AS)
+AS$date <- as.Date(AS$date)
+
+AS$Shots <- round(AS$Shots, digits = 1)
+
+as <- ggplot(AS, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5, color="orange") +
+  geom_text(data=subset(AS, Shots > 77),
+            aes(label=Shots),hjust=-0.25, vjust=0, color= "black", size=2.75) + 
+  geom_point(size=3, color="orange") +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Smellie #5\n",
+          subtitle = "Austin Smellie | Junior | SF | Preston, Idaho") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+```
+
+___
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+as
+```
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# 10 - Ball
+Ball <- total$player %in% c("Ball")
+TB <- total[Ball,]
+TB
+str(TB)
+TB$date <- as.Date(TB$date)
+
+TB$Shots <- round(TB$Shots, digits = 1)
+
+tb <- ggplot(TB, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5, color="orange") +
+  geom_text(data=subset(TB, Shots > 86), 
+            aes(label=Shots),hjust=1.25, vjust=0, color="black", size=2.75) + 
+  geom_point(size=3, color="orange") +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Ball #10\n",
+       subtitle = "Tommy Ball | Freshman | PG | El Dorado Hills, California") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+
+```
+
+___
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+tb
+```
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# 12 - Carlson
+Carlson <- total$player %in% c("Carlson")
+JC <- total[Carlson,]
+JC
+str(JC)
+JC$date <- as.Date(JC$date)
+
+JC$Shots <- round(JC$Shots, digits = 1)
+
+jc <- ggplot(JC, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5, color= "orange") +
+  geom_text(data=subset(JC, Shots > 72), 
+            aes(label=Shots),hjust=-0.25, vjust=0, color="black", size=2.75) + 
+  geom_point(size=3, color="orange") +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Carlson #12\n",
+       subtitle = "James Carlson | Junior | PF | Coeur D'Alene, Idaho") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+
+```
+
+___
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+jc
+```
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# 13 - Carr
+Carr <- total$player %in% c("Carr")
+DC <- total[Carr,]
+DC
+str(DC)
+DC$date <- as.Date(DC$date)
+
+DC$Shots <- round(DC$Shots, digits = 1)
+
+dc <- ggplot(DC, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5, color="orange") +
+  geom_text(data=subset(DC, Shots > 71), 
+            aes(label=Shots),hjust=-0.25, vjust=0, color= "black", size=2.75) + 
+  geom_point(size=3, color="orange") +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Carr #13\n",
+       subtitle = "Daxton Carr | Sophomore | PF | Pocatello, Idaho") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+```
+
+___
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+dc
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# 14 - Karstetter 
+Karstetter <- total$player %in% c("Karstetter")
+KK <- total[Karstetter,]
+KK
+str(KK)
+KK$date <- as.Date(KK$date)
+
+KK$Shots <- round(KK$Shots, digits = 1)
+
+kk <- ggplot(KK, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5, color="orange") +
+  geom_text(data=subset(KK, Shots > 68), 
+            aes(label=Shots),hjust=-0.25, vjust=0, color= "black", size=2.75) + 
+  geom_point(size=3, color="orange") +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Karstetter #14\n",
+       subtitle = "Kyle Karstetter | Freshman | SF | Moses Lake, Washington") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+```
+
+___
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+kk
+```
+
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# 20 - Ford
+Ford <- total$player %in% c("Ford")
+RF <- total[Ford,]
+RF
+str(RF)
+RF$date <- as.Date(RF$date)
+
+RF$Shots <- round(RF$Shots, digits = 1)
+
+rf <- ggplot(RF, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5, color="orange") +
+  geom_text(data=subset(RF, Shots > 75), 
+            aes(label=Shots),hjust=1.25, vjust=0, color= "black", size=2.75) + 
+  geom_point(size=3, color="orange") +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Ford #20\n",
+       subtitle = "Robert Ford | Junior | SF | Portland, Oregon") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+```
+
+___
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+rf
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# 22 - Rodriguez
+Rodriguez <- total$player %in% c("Rodriguez")
+JR <- total[Rodriguez,]
+JR
+str(JR)
+JR$date <- as.Date(JR$date)
+
+JR$Shots <- round(JR$Shots, digits = 1)
+
+jr <- ggplot(JR, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5, color="orange") +
+  geom_text(data=subset(JR, Shots > 76),
+            aes(label=Shots),hjust=-0.25, vjust=0, color= "black",size=2.75) + 
+  geom_point(size=3, color="orange") +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Rodriguez #22\n",
+       subtitle = "Jared Rodriguez | Junior | SF | Glendale, Arizona") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+```
+
+___
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+jr
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# 25 - Parker
+Parker <- total$player %in% c("Parker")
+BP <- total[Parker,]
+BP
+str(BP)
+BP$date <- as.Date(BP$date)
+
+BP$Shots <- round(BP$Shots, digits = 1)
+
+bp <- ggplot(BP, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5, color="orange") +
+  geom_text(data=subset(BP, Shots > 67.5), 
+            aes(label=Shots),hjust=-0.25, vjust=0, color= "black", size=2.75) + 
+  geom_point(size=3, color="orange") +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Parker #25\n",
+       subtitle = "Brayden Parker | Sophomore | C | Preston, Idaho") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+```
+
+___
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+bp
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# 32 - Visentin
+Visentin <- total$player %in% c("Visentin")
+ZV <- total[Visentin,]
+ZV
+str(ZV)
+ZV$date <- as.Date(ZV$date)
+
+ZV$Shots <- round(ZV$Shots, digits = 1)
+
+zv <- ggplot(ZV, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5, color="orange") +
+  geom_text(data=subset(ZV, Shots > 64), 
+            aes(label=Shots),hjust=-0.25, vjust=0, color= "black", size=2.75) + 
+  geom_point(size=3, color="orange") +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Visentin #32\n",
+       subtitle = "Zach Visentin | Sophomore | C | Springville, Utah") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+```
+
+___
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+zv
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# 34 - Buzangu 
+Buzangu <- total$player %in% c("Buzangu")
+GB <- total[Buzangu,]
+GB
+str(GB)
+GB$date <- as.Date(GB$date)
+
+GB$Shots <- round(GB$Shots, digits = 1)
+
+gb <- ggplot(GB, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5, color="orange") +
+  geom_text(data=subset(GB, Shots > 59), 
+            aes(label=Shots),hjust=-0.25, vjust=0, color= "black", size=2.75) + 
+  geom_point(size=3, color="orange") +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Buzangu #34\n",
+       subtitle = "Gedeon Buzangu | Junior | C | Kinsasha, Congo") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+```
+
+___
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+gb
+```
+
+
