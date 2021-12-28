@@ -10,10 +10,15 @@ pagetitle: Austin Daines
 
 ___
 
-```{r}
+```{r, message=FALSE, echo=TRUE, warning=FALSE, include=FALSE}
 library(knitr)
+
+```
+
+___
+
+```{r, message=FALSE, echo=TRUE, warning=FALSE, fig.align='center', fig.height=8, fig.width=6.5}
 knitr::include_graphics("./austin-daines-resume.pdf")
 ```
-___
 
 
