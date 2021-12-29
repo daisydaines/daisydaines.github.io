@@ -1,6 +1,5 @@
 ---
-title: "Resume"
-date: "December 21st, 2021"
+title: "Austin Daines"
 output: 
   prettydoc::html_pretty:
     theme: architect
@@ -8,6 +7,15 @@ output:
 pagetitle: Austin Daines
 ---
 
+___
+github: [daisydaines](https://github.com/daisydaines)
+<br><br><br><br>
+twitter: [daisydaines](https://twitter.com/daisydaines)
+<br><br><br><br>
+Linked in: [Austin Daines](https://www.linkedin.com/in/austin-daines-2766a4217/)
+<br><br><br><br>
+email: austin@daines.net
+<br><br><br><br>
 ___
 
 ```{r, message=FALSE, echo=TRUE, warning=FALSE, include=FALSE}
@@ -20,5 +28,4 @@ ___
 ```{r, message=FALSE, echo=TRUE, warning=FALSE, fig.align='center', include=FALSE}
 knitr::include_graphics("./austin-daines-resume.pdf")
 ```
-
 
