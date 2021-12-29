@@ -122,7 +122,7 @@ table(half_court$passes)
 ```
 
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, dpi = 200}
 ggplot(half_court, aes(x=passes)) +
   geom_bar(color="black", fill="dark green") +
   theme_minimal() +
@@ -138,7 +138,7 @@ ggplot(half_court, aes(x=passes)) +
 
 ___
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, dpi = 200}
 ggplot(half_court, aes(x=sides)) +
   geom_bar(color="black", fill="dark green") +
   theme_minimal() +
@@ -196,7 +196,7 @@ str(ppp)
 
 ___
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, dpi = 200}
 ggplot(ppp, aes(x=passes, y=ppp)) +
   geom_point(color="dark green") +
   geom_smooth(method = "lm", fill=NA, color="black") +
@@ -238,7 +238,7 @@ ppp_sides <- data.frame(sides = c(1, 2, 3, 4, 5),
 
 ___
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, dpi = 200}
 ggplot(ppp_sides, aes(x=sides, y=ppp_sides)) +
   geom_point(color="dark green") +
   geom_smooth(method = "lm", fill=NA, color="black") +

@@ -541,7 +541,7 @@ first_plot <- ggplot(total, aes(x=date, y=Shots, color=player)) +
 ```
 
 
-```{r, message=FALSE,warning=FALSE,echo=FALSE,}
+```{r, message=FALSE,warning=FALSE,echo=FALSE, dpi = 200}
 first_plot
 ```
 
@@ -575,7 +575,7 @@ bg <- bg + scale_color_manual(breaks = c("Parker", "Buzangu", "Carlson", "Visent
 
 _____________________________________
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, dpi = 200}
 bg
 ```
 
@@ -609,7 +609,7 @@ wg <- wg + scale_color_manual(breaks = c("Rodriguez","Porter", "Karstetter", "Ca
 
 _____________________________________
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE}
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 wg
 ```
 
@@ -643,7 +643,7 @@ gg <- gg + scale_color_manual(breaks = c("Burgin", "Sorensen", "Cool", "Ball", "
 
 _____________________________________
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE}
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 gg
 ```
 
@@ -677,7 +677,7 @@ aj <- ggplot(AJB, aes(x=date, y=Shots, color=player)) +
 
 ___
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE}
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 aj
 ```
 
@@ -712,7 +712,7 @@ ls <- ggplot(LCS, aes(x=date, y=Shots, color=player)) +
 
 ___
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE}
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 ls
 ```
 
@@ -746,7 +746,7 @@ tc <- ggplot(TC, aes(x=date, y=Shots, color=player)) +
 
 ___
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE}
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 tc
 ```
 
@@ -779,7 +779,7 @@ mp <- ggplot(MP, aes(x=date, y=Shots, color=player)) +
 
 ___
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE}
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 mp
 ```
 
@@ -812,7 +812,7 @@ et <- ggplot(ET, aes(x=date, y=Shots, color=player)) +
 
 ___
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE}
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 et
 ```
 
@@ -844,7 +844,7 @@ as <- ggplot(AS, aes(x=date, y=Shots, color=player)) +
 
 ___
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE}
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 as
 ```
 
@@ -877,7 +877,7 @@ tb <- ggplot(TB, aes(x=date, y=Shots, color=player)) +
 
 ___
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE}
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 tb
 ```
 
@@ -910,7 +910,7 @@ jc <- ggplot(JC, aes(x=date, y=Shots, color=player)) +
 
 ___
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE}
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 jc
 ```
 
@@ -942,7 +942,7 @@ dc <- ggplot(DC, aes(x=date, y=Shots, color=player)) +
 
 ___
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE}
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 dc
 ```
 
@@ -975,7 +975,7 @@ kk <- ggplot(KK, aes(x=date, y=Shots, color=player)) +
 
 ___
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE}
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 kk
 ```
 
@@ -1009,7 +1009,7 @@ rf <- ggplot(RF, aes(x=date, y=Shots, color=player)) +
 
 ___
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE}
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 rf
 ```
 
@@ -1042,7 +1042,7 @@ jr <- ggplot(JR, aes(x=date, y=Shots, color=player)) +
 
 ___
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE}
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 jr
 ```
 
@@ -1075,7 +1075,7 @@ bp <- ggplot(BP, aes(x=date, y=Shots, color=player)) +
 
 ___
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE}
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 bp
 ```
 
@@ -1108,7 +1108,7 @@ zv <- ggplot(ZV, aes(x=date, y=Shots, color=player)) +
 
 ___
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE}
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 zv
 ```
 
@@ -1141,7 +1141,7 @@ gb <- ggplot(GB, aes(x=date, y=Shots, color=player)) +
 
 ___
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE}
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 gb
 ```
 
