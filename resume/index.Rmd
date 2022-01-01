@@ -32,3 +32,10 @@ resume <- knitr::include_graphics("./austin-daines-resume.pdf")
 resume
 ```
 
+
+
+
+
+
+
+

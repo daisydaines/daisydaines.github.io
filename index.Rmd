@@ -38,8 +38,11 @@ ___
 
 ## Case Studies
 
-[Cyclistic](https://daisydaines.github.io/Cyclistic_Case_Study_OCT_2021) Case Study
+[Cyclistic](https://daisydaines.github.io/cyclistic_case_study) Case Study
 
-[Wellness](https://daisydaines.github.io/Wellness_Case_Study_OCT_2021) Case Study
+[Wellness](https://daisydaines.github.io/wellness_case_study) Case Study
 
-[Personal](https://daisydaines.github.io/My_Own_Case_Study_OCT_2021) Case Study
+[Personal](https://daisydaines.github.io/my_own_case_study) Case Study
+
+___
+

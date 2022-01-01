@@ -17,23 +17,19 @@ library(broom)
 
 ```
 
-### I. First we will load the data FacultySalaries_1995.csv   
+### I. Load the data FacultySalaries_1995.csv   
 College faculty salaries and total compensation from 1995, by Ranks, Tier, and State  College faculty have 3 ranks: Assistant (not tenured), Associate (tenured), and Full (been around forever or something). College "Tier" refers to the amount of funding devoted to research vs the amount of funding for teaching, with Tier I being universities that spend more on research than teaching and award PhD degrees.
 
 ```{r, echo=FALSE, warning=FALSE, include=FALSE}
 fs <- read_csv("../../Data_Course_DAINES/Exam_4/FacultySalaries_1995.csv")
-
 ```
 
 ```{r, echo=FALSE, warning=FALSE}
 head(fs)
-
 ```
 
-
-Looks a little messy. In order to replicate Fig1
+Looks a little messy. In order to replicate Figure 1
  we will need to clean the data. 
-
 
 ```{r, echo=FALSE, warning=FALSE, include=FALSE}
 names(fs)
@@ -69,21 +65,21 @@ dev.off()
 head(fs4)
 ```
 
-ahhh, much better. 
+Oh, much better. 
 
 ___ 
 
-Next, we will remake Fig1
+Next, we will remake Figure 1
 
 <center>
-![Fig1](Fig1.png)
+![Figure 1](Fig1.png)
 </center>
 
 ***
 
 ##### Our remake
 
-```{r, echo=FALSE, warning=FALSE}
+```{r, echo=FALSE, warning=FALSE, dpi= 200, fig.height=6, fig.width=4}
 ggplot(fs4, aes(y=Salary,x= Rank)) +
   geom_boxplot(aes(fill=Rank)) +
   facet_wrap(~Tier) +
@@ -91,11 +87,11 @@ ggplot(fs4, aes(y=Salary,x= Rank)) +
   theme(axis.text.x = element_text(angle = 55))
 ```
 
-Not too shabby 
+Not too shabby. 
 
 ___
 
-### II. Our next task is to Export an ANOVA table to a file called "Salary_ANOVA_Summary.txt"
+### II. Export an ANOVA table to a file called "Salary_ANOVA_Summary.txt"
 The ANOVA model should test the influence of "State", "Tier", and "Rank" on "Salary" but should NOT include any interactions between those predictors.
 
 ```{r, echo=FALSE, warning=FALSE}
@@ -110,7 +106,6 @@ model <- lm(Salary ~ State + Tier + Rank, data=fs4)
 
 # create sum of squares table using type 3, common in social science
 sstable <- aov(model, type = 3)
-
 ```
 
 ```{r, warning=FALSE}
@@ -119,27 +114,24 @@ sstable <- aov(model, type = 3)
 sstable
 ```
 
-
-### III. The rest of the test uses another data set. The "Juniper_Oils.csv" data. Get it loaded and take a look.
+### III. The rest of the test uses another data set: The "Juniper_Oils.csv" data. Load the data and take a look.
 It's not exactly tidy either. Get used to that. It's real data collected as part of a collaboration between Young Living Inc. and UVU Microbiology. A number of dead cedar trees were collected and the chemical composition of their essential oil content was measured. The hypothesis was that certain chemicals would degrade over time since they died in fires. So there are a bunch of columns for chemical compounds, and a column for "YearsSinceBurn." The values under each chemical are Mass-Spec concentrations.
 
-Lets look at the data first 
+Let's look at the data first 
+
 ```{r, warning=FALSE, echo=FALSE, include=FALSE}
 jo <- read_csv("../../Data_Course_DAINES/Exam_4/Juniper_Oils.csv")
-
 ```
 
 
 ```{r, warning=FALSE, echo=FALSE}
 jo
-
 ```
 
-Well, it's time to tidy it up so we can reproduce Fig2. 
-
+Well, it's time to tidy it up so we can reproduce Figure 2. 
 
 <center>
-![Fig2](Fig2.png)
+![Figure 2](Fig2.png)
 </center>
 
 ```{r, warning=FALSE, echo=FALSE, include=FALSE}
@@ -154,9 +146,6 @@ jo2 <- jo1 %>%
   pivot_longer(cols= "alpha-pinene":"thujopsenal",  
     names_to = "ChemicalID",
     values_to = "Concentration") 
-
-#IV. 
-
 ```
 
 ___
@@ -166,15 +155,16 @@ Here is our tidy data:
 ```{r, warning=FALSE, echo=FALSE}
 glimpse(jo2)
 ```
-ahh, much better. 
+
+That looks much better. 
 
 ___
 
-### IV. Make me a graph of the following:
+### IV. Make a graph of the following:
         x = YearsSinceBurn
         y = Concentration
         facet = ChemicalID (use free y-axis scales)
-```{r,  warning=FALSE, echo=FALSE}
+```{r,  warning=FALSE, echo=FALSE, message= FALSE, dpi=200, fig.width=8}
 ggplot(jo2, aes(x = YearsSinceBurn, y = Concentration)) + 
   facet_wrap(~ChemicalID, scales = "free") +
   geom_smooth(size=1.1) +
@@ -183,7 +173,7 @@ ggplot(jo2, aes(x = YearsSinceBurn, y = Concentration)) +
 
 ### V. Finally, we will use a generalized linear model to find which chemicals show concentrations that are significantly (significant, as in P < 0.05) affected by "Years Since Burn". 
 
-##### I'll show you what I mean...here's the data frame I need you to produce from your glm model:
+##### I'll show you what I mean. Here is the data frame I need you to produce from your glm model:
           A tibble: 6 x 5
           term                          estimate std.error statistic  p.value
           <chr>                            <dbl>     <dbl>     <dbl>    <dbl>
@@ -195,6 +185,7 @@ ggplot(jo2, aes(x = YearsSinceBurn, y = Concentration)) +
           6 cis-thujopsene:YearsSinceBurn    0.332     0.141      2.35 1.90e- 2
           
 Let's see how we did
+
 ```{r, warning=FALSE, echo=FALSE}
 modJO <- glm(data = jo2, Concentration ~ ChemicalID * YearsSinceBurn)
 
@@ -202,6 +193,7 @@ tidy(modJO) %>%
 filter(p.value <= 0.05) %>%
 mutate(term = term %>% str_remove_all("ChemicalID"))
 ```
+
 ___
 
 <style>
@@ -210,6 +202,5 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 <div class = "blue">
 
 ## Success!
-##### We did it!
 
 </div>
