@@ -19,6 +19,12 @@ ___
 
 ___
 
+## NBA Projects
+
+[NBA Shot Charts](https://daisydaines.github.io/NBA_shot_charts/)
+
+___
+
 ## Class Work 
 
 Data Analysis 
@@ -38,11 +44,7 @@ ___
 
 ## Case Studies
 
-[Cyclistic](https://daisydaines.github.io/cyclistic_case_study) Case Study
-
-[Wellness](https://daisydaines.github.io/wellness_case_study) Case Study
-
-[Personal](https://daisydaines.github.io/my_own_case_study) Case Study
+[Cyclistic](https://daisydaines.github.io/cyclistic_case_study) Case Study (coming soon)
 
 ___
 
