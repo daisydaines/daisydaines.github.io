@@ -566,7 +566,7 @@ final <- final +
 ```
 
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, dpi = 200}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include = TRUE, dpi = 200}
 ########################################
 # DRAW FINAL PRODUCT
 ########################################
