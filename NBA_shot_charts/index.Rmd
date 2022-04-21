@@ -98,7 +98,7 @@ team_colors <- data.frame(team_name, primary_color, secondary_color, third_color
 
 # Insert any player name (from 1996-today) where prompted in the console
 #player_name <- readline(prompt="Enter player name: ")
-player_name <- "Rudy Gay"
+player_name <- "Dirk Nowitzki"
 
 # Find player ID based on player name
 player_id <- full_df$PLAYER_ID[match(player_name, full_df$PLAYER_NAME)]
@@ -124,7 +124,7 @@ final_year <- as.character(max(years_played))
 
 # Enter one of the team names in the console where prompted
 #team_color_scheme <- readline(prompt="Enter team name from list above: ")
-team_color_scheme <- "Utah Jazz"
+team_color_scheme <- "Dallas Mavericks"
 
 # Get color one
 color1 <- team_colors$primary_color[match(team_color_scheme, team_colors$team_name)]
@@ -211,13 +211,13 @@ court_themes = list(
     hex_border_color = "#000000"
   ),
   ppt = list(
-    court = color1,
+    court = color2,
     lines = 'white',
     text = '#f0f0f0',
     made = '#00bfc4',
     missed = '#f8766d',
     hex_border_size = 0,
-    hex_border_color = color1
+    hex_border_color = color2
   )
 )
 
@@ -435,7 +435,7 @@ plot_court = function(court_theme = court_themes$light, use_short_three = FALSE)
   
   # Final plot creation
   ggplot() +
-    geom_point(data = shots, aes(x=LOC_X, y=LOC_Y), size =0.5, color = color2) +
+    geom_point(data = shots, aes(x=LOC_X, y=LOC_Y), size =0.5, color = color3) +
     geom_path(
       data = court_points,
       aes(x = x, y = y, group = desc),
@@ -444,7 +444,7 @@ plot_court = function(court_theme = court_themes$light, use_short_three = FALSE)
     theme_minimal(base_size = 22) +
     theme(text = element_text(color = court_theme$text),
       ### color scheme for background
-      plot.background = element_rect(fill = color1, color = color1),
+      plot.background = element_rect(fill = color2, color = color2),
       panel.background = element_rect(fill = court_theme$court, color = court_theme$court),
       panel.grid = element_blank(),
       panel.border = element_blank(),
@@ -461,8 +461,8 @@ plot_court = function(court_theme = court_themes$light, use_short_three = FALSE)
 ########################################
 # SET VARIABLES FOR JERSEY AND TITLE
 ########################################
-jersey_color <- color2
-number_color <- color2
+jersey_color <- color3
+number_color <- color3
 # change total fg from x,xxx to x.xK
 fg_made <- as.numeric(nrow(shots))
 fg_made_k <- sprintf("%sK", format(round(fg_made/1000, 1), dec="."))
@@ -550,10 +550,10 @@ final <- final +
                     jersey_height, (jersey_start - 1.0) + jersey_side) +
   # total FG made
   annotate("text", label=paste0(fg_made_k, " FG"), 
-          x=-180, y=480, color = color2, size = 6, fontface = "bold") +
+          x=-180, y=480, color = color3, size = 6, fontface = "bold") +
   # total 3pt made
   annotate("text", label=paste0(fg_made_three_k, " 3PT"), 
-           x=180, y=480, color = color2, size = 6, fontface = "bold") +
+           x=180, y=480, color = color3, size = 6, fontface = "bold") +
   # team played for
   annotate("text", label=paste0(team_color_scheme), 
            x=-180, y=440, color = color3, size = 4, fontface = "italic") +
@@ -561,8 +561,8 @@ final <- final +
   annotate("text", label=paste(rookie_year, final_year, sep = " - "), 
          x=180, y=440, color = color3, size = 4, fontface = "italic") +
   # jersey number
-  annotate("text", label="8", 
-           x=0, y=435, color = number_color, size = 14, fontface = "bold")
+  annotate("text", label="41", 
+           x=0, y=435, color = number_color, size = 8, fontface = "bold")
 ```
 
 
@@ -570,7 +570,7 @@ final <- final +
 ########################################
 # DRAW FINAL PRODUCT
 ########################################
-ggdraw(final) + theme(plot.background = element_rect(fill= color1, color = NA))
+ggdraw(final) + theme(plot.background = element_rect(fill= color2, color = NA))
 
 ```
 
