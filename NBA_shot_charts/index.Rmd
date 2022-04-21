@@ -23,11 +23,8 @@ library(httr)
 library(XML)
 library(RCurl)
 library(devtools)
-#library(nbastatR)
 #devtools::install_github("lbenz730/ncaahoopR")
 #library(ncaahoopR)
-#install.packages("extrafont")
-library(extrafont)
 #install.packages("cowplot")
 library(cowplot)
 library(lubridate)
@@ -38,7 +35,6 @@ library(lubridate)
 ########################################
 # ASSEMBLE SHOT DATA DF
 ########################################
-
 # Create file path to load all shot data csv's at the same time
 file_path <- fs::dir_ls("shot_files_v2")
 file_path
@@ -72,7 +68,6 @@ full_df <- do.call(rbind.data.frame, all_shot_data)
 ########################################
 # CREATE TEAM COLOR DF
 ########################################
-
 # Build team and color df
 team_name <- unique(full_df$TEAM_NAME, incomparables = FALSE)
 
@@ -103,7 +98,7 @@ team_colors <- data.frame(team_name, primary_color, secondary_color, third_color
 
 # Insert any player name (from 1996-today) where prompted in the console
 #player_name <- readline(prompt="Enter player name: ")
-player_name <- "Manu Ginobili"
+player_name <- "Rudy Gay"
 
 # Find player ID based on player name
 player_id <- full_df$PLAYER_ID[match(player_name, full_df$PLAYER_NAME)]
@@ -129,7 +124,7 @@ final_year <- as.character(max(years_played))
 
 # Enter one of the team names in the console where prompted
 #team_color_scheme <- readline(prompt="Enter team name from list above: ")
-team_color_scheme <- "San Antonio Spurs"
+team_color_scheme <- "Utah Jazz"
 
 # Get color one
 color1 <- team_colors$primary_color[match(team_color_scheme, team_colors$team_name)]
@@ -150,22 +145,18 @@ shots$LOC_X <- shots$LOC_X * (-1)
 ########################################
 # PLOT ROUGH DRAFT
 ########################################
-
 # Plot rough copy on normal grid
 ggplot(shots, aes(x=LOC_X, y=LOC_Y)) + 
   geom_point(alpha= 0.50, color = "black") +
   theme_minimal()
 ```
 
-
 ___
-
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
 ########################################
 # DRAWING THE COURT
 ########################################
-
 # Creating court function and plotting
 circle_points = function(center = c(0, 0), radius = 1, npoints = 360) {
   angles = seq(0, 2 * pi, length.out = npoints)
@@ -193,6 +184,11 @@ hash_height = 280 + baseline_coord
 free_throw_hash = 10
 fth_height = baseline_coord + 70
 base_hash_height = 7.5
+jersey_start = height - (inner_key_width / 4)
+jersey_width = inner_key_width - 15
+jersey_height = jersey_start + (key_height * 0.7)
+shoulder_width = 12.5
+jersey_side = key_height * 0.5
 
 # Court themes
 court_themes = list(
@@ -233,10 +229,22 @@ plot_court = function(court_theme = court_themes$light, use_short_three = FALSE)
   }
   
   court_points = data_frame(
-    x = c(width / 2, width / 2, -width / 2, -width / 2, width / 2),
-    y = c(height, baseline_coord, baseline_coord, height, height),
+    x = c(width / 2, width / 2, -width / 2, -width / 2),
+    y = c(height, baseline_coord, baseline_coord, height),
     desc = "perimeter"
   )
+  
+  court_points = bind_rows(court_points , data_frame(
+    x = c(-width / 2, (-width / 2) + (1.5875 * inner_key_width)),
+    y = c(height, height),
+    desc = "left_half"
+  ))
+  
+  court_points = bind_rows(court_points , data_frame(
+    x = c((width / 2) - (1.5875 * inner_key_width), width / 2),
+    y = c(height, height), 
+    desc = "right_half"
+  ))
   
   court_points = bind_rows(court_points , data_frame(
     x = c(outer_key_width / 2, outer_key_width / 2, -outer_key_width / 2, -outer_key_width / 2),
@@ -248,6 +256,12 @@ plot_court = function(court_theme = court_themes$light, use_short_three = FALSE)
     x = c(inner_key_width / 2, inner_key_width / 2, -inner_key_width / 2, -inner_key_width / 2),
     y = c(baseline_coord, key_height, key_height, baseline_coord),
     desc = "inner_key"
+  ))
+  
+  court_points = bind_rows(court_points , data_frame(
+    x = c((-outer_key_width / 2) - free_throw_hash, -outer_key_width / 2),
+    y = c(fth_height, fth_height),
+    desc = "ft_hash1"
   ))
   
   court_points = bind_rows(court_points , data_frame(
@@ -376,14 +390,9 @@ plot_court = function(court_theme = court_themes$light, use_short_three = FALSE)
     desc = "neckb"
   ))
   
-  half_court_circle = circle_points(center = c(0, height), radius = inner_key_width / 2)
+  foul_circle = circle_points(center = c(0, key_height - 1), radius = inner_key_width / 2)
   
-  half_circle_bottom = filter(half_court_circle, y < height) %>% 
-    mutate(desc = paste0("half_circle_bottom"))
-  
-  foul_circle = circle_points(center = c(0, key_height), radius = inner_key_width / 2)
-  
-  foul_circle_top = filter(foul_circle, y > key_height) %>%
+  foul_circle_top = filter(foul_circle, y > key_height - 1) %>%
     mutate(desc = "foul_circle_top")
   
   foul_circle_bottom = filter(foul_circle, y < key_height) %>%
@@ -413,7 +422,8 @@ plot_court = function(court_theme = court_themes$light, use_short_three = FALSE)
   
   court_points = bind_rows(
     court_points,
-    half_circle_bottom,
+    #half_circle_bottom,
+    #jersey_neck_bottom,
     foul_circle_top,
     foul_circle_bottom,
     hoop,
@@ -441,41 +451,126 @@ plot_court = function(court_theme = court_themes$light, use_short_three = FALSE)
       axis.text = element_blank(),
       axis.title = element_blank(),
       axis.ticks = element_blank(),
-      legend.background = element_rect(fill = court_theme$court, color = court_theme$court),
-      legend.margin = margin(-1, 0, 0, 0, unit = "lines"),
-      legend.position = "bottom",
-      legend.key = element_blank(),
-      legend.text = element_text(size = rel(1.0))
+      legend.background = element_rect(fill = court_theme$court, color = court_theme$court)
     )
 }
 ```
 
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+########################################
+# SET VARIABLES FOR JERSEY AND TITLE
+########################################
+jersey_color <- color2
+number_color <- color2
+# change total fg from x,xxx to x.xK
+fg_made <- as.numeric(nrow(shots))
+fg_made_k <- sprintf("%sK", format(round(fg_made/1000, 1), dec="."))
+## change total 3fg from x,xxx to x.xK
+fg_threepoint <- as.numeric(nrow(shots[shots$SHOT_TYPE=="3PT Field Goal",]))
+fg_made_three_k <- sprintf("%sK", format(round(fg_threepoint/1000, 1), dec="."))
+
+```
+
+
+
 ### And turning it into this 
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, dpi = 200}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include= FALSE, dpi = 200}
 ########################################
 # PLOT SHOTS ON COURT
 ########################################
 final <- plot_court(court_themes$ppt, use_short_three = F) +
   scale_x_continuous(limits = c(-250, 250)) +
-  scale_y_continuous(limits = c(baseline_coord, 470)) +
-  theme(plot.title = element_text(hjust = .5, size = 48, 
-                                  family = "Helvetica", face = "bold", vjust = -2, color = color2),
-        plot.subtitle = element_text(hjust = .5, size = 24, 
-                                     family = "Helvetica", face = "bold", vjust = -6, color = color2),
-        plot.caption = element_text(hjust = .5, size = 8, 
-                                    family = "Helvetica", face = "italic", color = color2 , vjust = 8)) +
-  ggtitle(label = toupper(player_name),
-          subtitle = toupper(team_color_scheme)) +
-  labs(caption = paste(rookie_year, final_year, sep = " - "))
+  scale_y_continuous(limits = c(baseline_coord, 500))
 
-ggdraw(final) + theme(plot.background = element_rect(fill= color1, color = NA))
+#ggdraw(final) + theme(plot.background = element_rect(fill= color1, color = NA))
 
 #ggsave(paste0(player_name, ".png"), height = 10, width = 8, dpi = 300)
 
 ```
 
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+########################################
+# JERSEY
+########################################
+jf <- data.frame(
+  #jersey bottom
+  x1= jersey_width/3.5, x2= -jersey_width/3.5, 
+  y1= jersey_start, y2= jersey_start, 
+  # jersey left side
+  x3= -jersey_width/3.5 + 1.0, x4= -jersey_width/3.5 + 1.0,
+  y3= jersey_start - 1.0, y4= jersey_start + jersey_side,
+  # jersey right side
+  x5= jersey_width/3.5 - 1.0, x6= jersey_width/3.5 - 1.0,
+  y5= jersey_start - 1.0, y6= jersey_start + jersey_side,
+  # jersey left top
+  x7= (-jersey_width / 10) - shoulder_width, x8= -jersey_width / 10,
+  y7= jersey_height, y8= jersey_height,
+  # jersey right top
+  x9= (jersey_width / 10) + shoulder_width, x10= jersey_width / 10,
+  y9= jersey_height, y10= jersey_height,
+  # jersey neck
+  x11= -jersey_width / 10 - 2.0, x12= jersey_width / 10 + 2.0,
+  y11= jersey_height + 0.75, y12= jersey_height + 0.75)
+# jersey sleeve
+left_curve <-curveGrob(0, 0, 1, 1, default.units = "npc",
+                       curvature = 0.3, angle = 50, ncp = 50, shape = 1,
+                       square = FALSE, squareShape = 1,
+                       inflect = FALSE, open = TRUE,
+                       debug = FALSE,
+                       name = NULL, gp = gpar(col=jersey_color, lwd=3.5), vp = NULL)
+# jersey sleeve
+right_curve <-curveGrob(0, 1, 1, 0, default.units = "npc",
+                        curvature = 0.3, angle = 130, ncp = 50, shape = 1,
+                        square = FALSE, squareShape = 1,
+                        inflect = FALSE, open = TRUE,
+                        debug = FALSE,
+                        name = NULL, gp = gpar(col=jersey_color, lwd=3.5), vp = NULL)
+# add segments to outline jersey
+final <- final + 
+  geom_segment(aes(x=x1, y=y1, xend=x2, yend=y2), color= jersey_color, size = 1.5, data=jf)
+
+final <- final +
+  geom_segment(aes(x=x3, y=y3, xend=x4, yend=y4), color= jersey_color, size = 1.5, data=jf)
+
+final <- final +
+  geom_segment(aes(x=x5, y=y5, xend=x6, yend=y6), color= jersey_color, size = 1.5, data=jf)
+
+final <- final +
+  geom_segment(aes(x=x7, y=y7, xend=x8, yend=y8), color= jersey_color, size = 1.5, data=jf)
+
+final <- final +
+  geom_segment(aes(x=x9, y=y9, xend=x10, yend=y10), color= jersey_color, size = 1.5, data=jf) +
+  geom_curve(aes(x=x11, y=y11, xend=x12, yend=y12), color= jersey_color, size = 1.5, data=jf, curvature = 1) +
+  annotation_custom(grob = left_curve, -jersey_width/3.5 + 1.0, -jersey_width/10 - shoulder_width + 1.0, 
+                    jersey_height,(jersey_start - 1.0) + jersey_side) +
+  annotation_custom(grob = right_curve, jersey_width/3.5 - 1.0, jersey_width/10 + shoulder_width - 1.0,
+                    jersey_height, (jersey_start - 1.0) + jersey_side) +
+  # total FG made
+  annotate("text", label=paste0(fg_made_k, " FG"), 
+          x=-180, y=480, color = color2, size = 6, fontface = "bold") +
+  # total 3pt made
+  annotate("text", label=paste0(fg_made_three_k, " 3PT"), 
+           x=180, y=480, color = color2, size = 6, fontface = "bold") +
+  # team played for
+  annotate("text", label=paste0(team_color_scheme), 
+           x=-180, y=440, color = color3, size = 4, fontface = "italic") +
+  # years of chart
+  annotate("text", label=paste(rookie_year, final_year, sep = " - "), 
+         x=180, y=440, color = color3, size = 4, fontface = "italic") +
+  # jersey number
+  annotate("text", label="8", 
+           x=0, y=435, color = number_color, size = 14, fontface = "bold")
+```
 
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE, dpi = 200}
+########################################
+# DRAW FINAL PRODUCT
+########################################
+ggdraw(final) + theme(plot.background = element_rect(fill= color1, color = NA))
+
+```
 
