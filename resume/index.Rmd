@@ -7,35 +7,51 @@ output:
 pagetitle: Austin Daines
 ---
 
+<div style="display: flex;">
+
+<div>
+
+<center>
+
+[![GMail](Images/gmail.png "Email me"){ height=40%, width=40% }](mailto:austin@daines.net)
+
+[![Linkedin](Images/linkedin.png "Austin Daines Linkedin Profile"){align=center, height=40%, width=40% }](https://www.linkedin.com/in/austin-daines-2766a4217/)
+
+[![Github](Images/github.png "Github Repo"){ height=40%, width=40% }](https://github.com/daisydaines)
+
+[![twitter](Images/twitter.png "@daisydaines Twitter"){ height=40%, width=40% }](https://twitter.com/daisydaines)
+
+</center>
+
+</div>
+
+<div>
+
+<center>
+
+![Updated May 2022](./Images/AD_Resume_2022-3.jpg){ height=100%, width=100% }
+
+</center>
+
+</div>
+
+</div>
+
 ```{r, message=FALSE, echo=TRUE, warning=FALSE, include=FALSE}
 library(knitr)
-
 ```
 
-___
-github: [daisydaines](https://github.com/daisydaines)
-<br><br><br><br>
-twitter: [daisydaines](https://twitter.com/daisydaines)
-<br><br><br><br>
-Linked in: [Austin Daines](https://www.linkedin.com/in/austin-daines-2766a4217/)
-<br><br><br><br>
-email: austin@daines.net
-
-___
 
 ```{r, message=FALSE, echo=TRUE, warning=FALSE, include=FALSE}
-resume <- knitr::include_graphics("./austin-daines-resume.pdf")
+resume_v2 <- knitr::include_graphics("./Images/AD_Resume_2022-3.jpg")
+linkedin <- knitr::include_graphics("./Images/linkedin.png")
+googlemail <- knitr::include_graphics("./Images/gmail.png")
+twitter <- knitr::include_graphics("./Images/twitter.png")
+github <- knitr::include_graphics("./Images/github.png")
 ```
 
 
-```{r, message=FALSE,warning=FALSE,echo=FALSE, dpi = 200}
-resume
+```{r, message=FALSE,warning=FALSE,echo=FALSE, dpi = 300, include=FALSE, out.width = "75%", fig.align = "center"}
+resume_v2
 ```
-
-
-
-
-
-
-
 
