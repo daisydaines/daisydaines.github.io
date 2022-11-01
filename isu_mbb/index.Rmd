@@ -7,6 +7,14 @@ output:
 pagetitle: Austin Daines
 ---
 
+```{r, include=FALSE}
+library(emojifont)
+```
+
+```{r, include=FALSE}
+emoji("smirk")
+```
+
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
 library(tidyverse)
 library(modelr)
@@ -541,77 +549,41 @@ first_plot <- ggplot(total, aes(x=date, y=Shots, color=player)) +
 ```
 
 
+# Three Point Shooting `r emoji("basketball")`
+
+<span style="color:black"> In order to stay relevant at any level of basketball today a team needs to be able to shoot the ball well, especially from beyond the arc. The three point shot has increased in popularity over the last ten years across all positions. </span> 
+
+<span style="color:orange"> **Idaho State** </span> <span style="color:black"> ranked 9th out of 11 teams in the Big Sky conference for 3pt shooting percentage during the 2020-21 season at 33.3% on almost 21 attempts per game. </span>
+
+<span style="color:black"> Three point shooting is not the only thing that helps a team win, but it has become a relevant factor. The top 3 finishers in the Big Sky conference standings ranked 2nd, 3rd, and 4th, in 3pt FG makes per game in 2020-21 season. Now, I'm not suggesting their shooting prowess was *the* reason they had great success during conference play, but it is intriguing relationship. </span>
+
+
+<br>
+
+# Summer Shooting
+
+<span style="color:orange"> **ISU's** </span> <span style="color:black"> players put up tens of thousands of three pointers over the course of the summer from several different spots around the arc. All of this was done with one goal: **get better at shooting the 3 ball**. </span> 
+
+* <span style="color:red"> Spoiler Alert: Although most players saw an increase in performance over the course of the summer, this did not improve three point shooting for the team during 2021-2022 season `r emoji("disappointed")`</span>
+
+<br>
+
+
 ```{r, message=FALSE,warning=FALSE,echo=FALSE, dpi = 200}
 first_plot
 ```
 
+<center>
 
-```{r,echo= FALSE, message=FALSE,warning=FALSE, include=FALSE}
-#BIGS
+Team performance 
 
-BIGS <- total$player %in% c("Parker","Buzangu", "Carlson", "Visentin")
-B <- total[BIGS,]
-B
-str(B)
-B$date <- as.Date(B$date)
+</center>
 
-bg <- ggplot(B, aes(x=date, y=Shots, color=player)) +
-  geom_line(size=1.5) +
-  #geom_smooth(method = "lm", fill=NA) +
-  geom_point(size=3) +
-  theme_minimal() +
-  xlab("\nDate") +
-  ylab("Shooting Percentage\n") +
-  ggtitle("Bigs\n") +
-  theme(plot.title = element_text(size = 26, face = "bold")) +
-  theme(axis.text=element_text(size=12), 
-        axis.title = element_text(size=14)) + 
-  theme(legend.text=element_text(size=12), 
-        legend.title = element_text(size=14, face = "bold"))
+____
 
-bg <- bg + scale_color_manual(breaks = c("Parker", "Buzangu", "Carlson", "Visentin"),
-                        values=c("red", "blue", "green", "orange"))
-```
+## Let's break it down by position...
 
-_____________________________________
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE, dpi = 200}
-bg
-```
-
-
-```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
-# WINGS
-
-WINGS <- total$player %in% c("Rodriguez","Porter", "Karstetter", "Carr", "Taylor", "Smellie")
-W <- total[WINGS,]
-W
-str(W)
-W$date <- as.Date(W$date)
-str(W)
-
-wg <- ggplot(W, aes(x=date, y=Shots, color=player)) +
-  geom_line(size=1.5) +
-  geom_point(size=3) +
-  theme_minimal() +
-  xlab("\nDate") +
-  ylab("Shooting Percentage\n") +
-  ggtitle("Wings\n") +
-  theme(plot.title = element_text(size = 26, face = "bold")) +
-  theme(axis.text=element_text(size=12), 
-        axis.title = element_text(size=14)) + 
-  theme(legend.text=element_text(size=12), 
-        legend.title = element_text(size=14, face = "bold"))
-
-wg <- wg + scale_color_manual(breaks = c("Rodriguez","Porter", "Karstetter", "Carr", "Taylor", "Smellie"),
-                        values=c("red", "blue", "green", "orange", "yellow", "black"))
-```
-
-_____________________________________
-
-```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
-wg
-```
+<br>
 
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
@@ -641,11 +613,22 @@ gg <- gg + scale_color_manual(breaks = c("Burgin", "Sorensen", "Cool", "Ball", "
 
 ```
 
-_____________________________________
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 gg
 ```
+
+<center>
+
+Point and shooting guard performance
+
+___
+
+</center>
+
+:::: {style="display: flex;"}
+
+::: {.column width="49%"}
 
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, include= FALSE}
@@ -675,9 +658,8 @@ aj <- ggplot(AJB, aes(x=date, y=Shots, color=player)) +
 
 ```
 
-___
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 300}
 aj
 ```
 
@@ -710,11 +692,14 @@ ls <- ggplot(LCS, aes(x=date, y=Shots, color=player)) +
 
 ```
 
-___
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 ls
 ```
+
+:::
+
+::: {.column width="49%"}
 
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
@@ -744,11 +729,127 @@ tc <- ggplot(TC, aes(x=date, y=Shots, color=player)) +
 
 ```
 
-___
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 tc
 ```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# 10 - Ball
+Ball <- total$player %in% c("Ball")
+TB <- total[Ball,]
+TB
+str(TB)
+TB$date <- as.Date(TB$date)
+
+TB$Shots <- round(TB$Shots, digits = 1)
+
+tb <- ggplot(TB, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5, color="orange") +
+  geom_text(data=subset(TB, Shots > 86), 
+            aes(label=Shots),hjust=1.25, vjust=0, color="black", size=2.75) + 
+  geom_point(size=3, color="orange") +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Ball #10\n",
+       subtitle = "Tommy Ball | Freshman | PG | El Dorado Hills, California") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+
+```
+
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
+tb
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# 20 - Ford
+Ford <- total$player %in% c("Ford")
+RF <- total[Ford,]
+RF
+str(RF)
+RF$date <- as.Date(RF$date)
+
+RF$Shots <- round(RF$Shots, digits = 1)
+
+rf <- ggplot(RF, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5, color="orange") +
+  geom_text(data=subset(RF, Shots > 75), 
+            aes(label=Shots),hjust=1.25, vjust=0, color= "black", size=2.75) + 
+  geom_point(size=3, color="orange") +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Ford #20\n",
+       subtitle = "Robert Ford | Junior | SF | Portland, Oregon") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
+rf
+```
+
+
+:::
+
+::::
+
+<br>
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# WINGS
+
+WINGS <- total$player %in% c("Rodriguez","Porter", "Karstetter", "Carr", "Taylor", "Smellie")
+W <- total[WINGS,]
+W
+str(W)
+W$date <- as.Date(W$date)
+str(W)
+
+wg <- ggplot(W, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5) +
+  geom_point(size=3) +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Wings\n") +
+  theme(plot.title = element_text(size = 26, face = "bold")) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14)) + 
+  theme(legend.text=element_text(size=12), 
+        legend.title = element_text(size=14, face = "bold"))
+
+wg <- wg + scale_color_manual(breaks = c("Rodriguez","Porter", "Karstetter", "Carr", "Taylor", "Smellie"),
+                        values=c("red", "blue", "green", "orange", "yellow", "black"))
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
+wg
+```
+
+<center>
+
+Small and power forward performance
+
+</center>
+
+___
+
+:::: {style="display: flex;"}
+
+::: {.column width="49%"}
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
 # 3 - Porter
@@ -777,7 +878,6 @@ mp <- ggplot(MP, aes(x=date, y=Shots, color=player)) +
 
 ```
 
-___
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 mp
@@ -810,7 +910,6 @@ et <- ggplot(ET, aes(x=date, y=Shots, color=player)) +
 
 ```
 
-___
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 et
@@ -842,77 +941,14 @@ as <- ggplot(AS, aes(x=date, y=Shots, color=player)) +
         axis.title = element_text(size=14))
 ```
 
-___
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 as
 ```
 
-```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
-# 10 - Ball
-Ball <- total$player %in% c("Ball")
-TB <- total[Ball,]
-TB
-str(TB)
-TB$date <- as.Date(TB$date)
+::: 
 
-TB$Shots <- round(TB$Shots, digits = 1)
-
-tb <- ggplot(TB, aes(x=date, y=Shots, color=player)) +
-  geom_line(size=1.5, color="orange") +
-  geom_text(data=subset(TB, Shots > 86), 
-            aes(label=Shots),hjust=1.25, vjust=0, color="black", size=2.75) + 
-  geom_point(size=3, color="orange") +
-  theme_minimal() +
-  xlab("\nDate") +
-  ylab("Shooting Percentage\n") +
-  ggtitle("Ball #10\n",
-       subtitle = "Tommy Ball | Freshman | PG | El Dorado Hills, California") +
-  theme(plot.title = element_text(size = 26, face = "bold"),
-        plot.subtitle = element_text(vjust = 14.0)) +
-  theme(axis.text=element_text(size=12), 
-        axis.title = element_text(size=14))
-
-```
-
-___
-
-```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
-tb
-```
-
-```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
-# 12 - Carlson
-Carlson <- total$player %in% c("Carlson")
-JC <- total[Carlson,]
-JC
-str(JC)
-JC$date <- as.Date(JC$date)
-
-JC$Shots <- round(JC$Shots, digits = 1)
-
-jc <- ggplot(JC, aes(x=date, y=Shots, color=player)) +
-  geom_line(size=1.5, color= "orange") +
-  geom_text(data=subset(JC, Shots > 72), 
-            aes(label=Shots),hjust=-0.25, vjust=0, color="black", size=2.75) + 
-  geom_point(size=3, color="orange") +
-  theme_minimal() +
-  xlab("\nDate") +
-  ylab("Shooting Percentage\n") +
-  ggtitle("Carlson #12\n",
-       subtitle = "James Carlson | Junior | PF | Coeur D'Alene, Idaho") +
-  theme(plot.title = element_text(size = 26, face = "bold"),
-        plot.subtitle = element_text(vjust = 14.0)) +
-  theme(axis.text=element_text(size=12), 
-        axis.title = element_text(size=14))
-
-```
-
-___
-
-```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
-jc
-```
+::: {.column width="49%"}
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
 # 13 - Carr
@@ -940,7 +976,6 @@ dc <- ggplot(DC, aes(x=date, y=Shots, color=player)) +
         axis.title = element_text(size=14))
 ```
 
-___
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 dc
@@ -973,45 +1008,11 @@ kk <- ggplot(KK, aes(x=date, y=Shots, color=player)) +
         axis.title = element_text(size=14))
 ```
 
-___
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 kk
 ```
 
-
-
-```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
-# 20 - Ford
-Ford <- total$player %in% c("Ford")
-RF <- total[Ford,]
-RF
-str(RF)
-RF$date <- as.Date(RF$date)
-
-RF$Shots <- round(RF$Shots, digits = 1)
-
-rf <- ggplot(RF, aes(x=date, y=Shots, color=player)) +
-  geom_line(size=1.5, color="orange") +
-  geom_text(data=subset(RF, Shots > 75), 
-            aes(label=Shots),hjust=1.25, vjust=0, color= "black", size=2.75) + 
-  geom_point(size=3, color="orange") +
-  theme_minimal() +
-  xlab("\nDate") +
-  ylab("Shooting Percentage\n") +
-  ggtitle("Ford #20\n",
-       subtitle = "Robert Ford | Junior | SF | Portland, Oregon") +
-  theme(plot.title = element_text(size = 26, face = "bold"),
-        plot.subtitle = element_text(vjust = 14.0)) +
-  theme(axis.text=element_text(size=12), 
-        axis.title = element_text(size=14))
-```
-
-___
-
-```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
-rf
-```
 
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
@@ -1040,10 +1041,91 @@ jr <- ggplot(JR, aes(x=date, y=Shots, color=player)) +
         axis.title = element_text(size=14))
 ```
 
-___
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 jr
+```
+
+:::
+
+::::
+
+<br>
+
+```{r,echo= FALSE, message=FALSE,warning=FALSE, include=FALSE}
+#BIGS
+
+BIGS <- total$player %in% c("Parker","Buzangu", "Carlson", "Visentin")
+B <- total[BIGS,]
+B
+str(B)
+B$date <- as.Date(B$date)
+
+bg <- ggplot(B, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5) +
+  #geom_smooth(method = "lm", fill=NA) +
+  geom_point(size=3) +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Bigs\n") +
+  theme(plot.title = element_text(size = 26, face = "bold")) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14)) + 
+  theme(legend.text=element_text(size=12), 
+        legend.title = element_text(size=14, face = "bold"))
+
+bg <- bg + scale_color_manual(breaks = c("Parker", "Buzangu", "Carlson", "Visentin"),
+                        values=c("red", "blue", "green", "orange"))
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, dpi = 200}
+bg
+```
+
+<center>
+
+Center performance
+
+</center>
+
+___
+
+:::: {style="display: flex;"}
+
+::: {.column width="49%"}
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
+# 12 - Carlson
+Carlson <- total$player %in% c("Carlson")
+JC <- total[Carlson,]
+JC
+str(JC)
+JC$date <- as.Date(JC$date)
+
+JC$Shots <- round(JC$Shots, digits = 1)
+
+jc <- ggplot(JC, aes(x=date, y=Shots, color=player)) +
+  geom_line(size=1.5, color= "orange") +
+  geom_text(data=subset(JC, Shots > 72), 
+            aes(label=Shots),hjust=-0.25, vjust=0, color="black", size=2.75) + 
+  geom_point(size=3, color="orange") +
+  theme_minimal() +
+  xlab("\nDate") +
+  ylab("Shooting Percentage\n") +
+  ggtitle("Carlson #12\n",
+       subtitle = "James Carlson | Junior | PF | Coeur D'Alene, Idaho") +
+  theme(plot.title = element_text(size = 26, face = "bold"),
+        plot.subtitle = element_text(vjust = 14.0)) +
+  theme(axis.text=element_text(size=12), 
+        axis.title = element_text(size=14))
+
+```
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
+jc
 ```
 
 
@@ -1073,12 +1155,14 @@ bp <- ggplot(BP, aes(x=date, y=Shots, color=player)) +
         axis.title = element_text(size=14))
 ```
 
-___
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 bp
 ```
 
+:::
+
+::: {.column width="49%"}
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, include=FALSE}
 # 32 - Visentin
@@ -1106,7 +1190,6 @@ zv <- ggplot(ZV, aes(x=date, y=Shots, color=player)) +
         axis.title = element_text(size=14))
 ```
 
-___
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 zv
@@ -1139,10 +1222,12 @@ gb <- ggplot(GB, aes(x=date, y=Shots, color=player)) +
         axis.title = element_text(size=14))
 ```
 
-___
 
 ```{r, echo=FALSE, message=FALSE,warning=FALSE, dpi = 200}
 gb
 ```
 
+:::
+
+::::
 
