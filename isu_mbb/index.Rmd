@@ -9,11 +9,35 @@ pagetitle: Austin Daines
 ---
 
 ```{r, include=FALSE}
+# load libraries
 library(emojifont)
+library(googlesheets4)
+library(tidyverse)
+```
+
+
+```{r, include=FALSE}
+# https://bigskyconf.com/sports/mbball
+# grab df from google sheet
+gs4_deauth()
+link22 <- "https://docs.google.com/spreadsheets/d/1YIMkvigzO-ermQiLu4DOTsW9U7ThaW4fXV9Dc0uRYZs/edit#gid=0"
+df22 <- read_sheet(link22)
 ```
 
 ```{r, include=FALSE}
-emoji("smirk")
+# extract columns for each season
+df21 <- df22 %>% select(5:7)
+df22 <- df22 %>% select(2:4)
+```
+
+```{r, include=FALSE}
+df21$three_fga[df21$three_fga == -9] <- 9
+
+df21 <- df21 %>% mutate(running_pct = round(cumsum(three_fg) / cumsum(three_fga), 3) * 100)
+df21$season <- "2020-21"
+
+df22 <- df22 %>% mutate(running_pct = round(cumsum(three_makes) / cumsum(three_attempts), 3) * 100)
+df22$season <- "2021-22"
 ```
 
 # Three Point Shooting `r emoji("basketball")`
@@ -31,9 +55,7 @@ emoji("smirk")
 
 <span style="color:black"> I was tasked with tracking and recording (and later visualizing and analyzing) tens of thousands of three point shots over the course of the summer. <span style="color:orange"> **ISU's** </span> players devoted dozens of hours in the gym with one goal: **get better at shooting the 3 ball**. </span> 
 
-* <span style="color:red"> **Spoiler Alert:** </span> <span style="color:black"> Although most players saw an increase in performance over the course of the summer, the team as whole did not improve three point shooting during the subsequent 2021-2022 season compared to the previous 2020-2021 season `r emoji("disappointed")`</span>
-
-* [Individual Shooting Charts](https://daisydaines.github.io/isu_mbb/summer_charts/)
+* <span style="color:red"> **Spoiler Alert:** </span> <span style="color:black"> Although most players saw an [increase in performance](https://daisydaines.github.io/isu_mbb/summer_charts/) over the course of the summer, the team as whole did not improve three point shooting during the subsequent 2021-2022 season compared to the previous 2020-2021 season `r emoji("disappointed")`</span>
 
 <br>
 
