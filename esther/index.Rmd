@@ -75,7 +75,9 @@ ___
 
 <center>
 
-![](images/trot_tshirt.jpg "T-shirt"){height=85%, width=85%}
+![](images/purple_shirt.jpg "T-shirt"){height=85%, width=85%}
+
+T-Shirt logo
 
 </center>
 
