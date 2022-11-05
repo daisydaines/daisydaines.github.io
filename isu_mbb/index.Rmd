@@ -19,41 +19,82 @@ library(tidyverse)
 ```{r, include=FALSE}
 # https://bigskyconf.com/sports/mbball
 # grab df from google sheet
+# deauth --anyone with link can access
 gs4_deauth()
+
+# url
 link22 <- "https://docs.google.com/spreadsheets/d/1YIMkvigzO-ermQiLu4DOTsW9U7ThaW4fXV9Dc0uRYZs/edit#gid=0"
-df22 <- read_sheet(link22)
+df <- read_sheet(link22)
 ```
 
 ```{r, include=FALSE}
 # extract columns for each season
-df21 <- df22 %>% select(5:7)
-df22 <- df22 %>% select(2:4)
+# 2019-20
+df20 <- df %>% select(8:10)
+# 2020-21
+df21 <- df %>% select(5:7)
+# 2021-22
+df22 <- df %>% select(2:4)
 ```
+
 
 ```{r, include=FALSE}
-df21$three_fga[df21$three_fga == -9] <- 9
+# rename columns
+df20 <- df20 %>% rename(
+  three_fg = three_fg...8,
+  three_fga = three_fga...9,
+  three_pct = three_pct...10
+)
 
-#df21 <- df21 %>% mutate(running_pct = round(cumsum(three_fg) / cumsum(three_fga), 3) * 100)
-df21$game <- 1:nrow(df21)
+df21 <- df21 %>% rename(
+  three_fg = three_fg...5,
+  three_fga = three_fga...6,
+  three_pct = three_pct...7
+)
 
-#df21 <- head(df21, - 6)
+# print column names
+colnames(df20)
+colnames(df21)
+```
+
+
+```{r, include=FALSE}
+# check structure
+str(df20)
+str(df21)
+str(df22)
+# change columns to numeric 
+df20$three_fga <- as.numeric(df20$three_fga)
 df21$three_fga <- as.numeric(df21$three_fga)
-
-df22 <- df22 %>% mutate(running_pct = round(cumsum(three_makes) / cumsum(three_attempts), 3) * 100)
+df22$three_attempts <- as.numeric(df22$three_attempts)
+# add column for games
+df20$game <- 1:nrow(df20)
+df21$game <- 1:nrow(df21)
 df22$game <- 1:nrow(df22)
 
-# convert three_fga to num
-df21 <- head(df21, - 6)
-df21$three_fga <- as.numeric(df21$three_fga)
+# add running total for percentage
+df20 <- df20 %>% mutate(running_pct = round(cumsum(three_fg) / cumsum(three_fga), 3) * 100)
+#df21 <- df21 %>% mutate(running_pct = round(cumsum(three_fg) / cumsum(three_fga), 3) * 100)
+df22 <- df22 %>% mutate(running_pct = round(cumsum(three_makes) / cumsum(three_attempts), 3) * 100)
 ```
+
+
+```{r, include=FALSE}
+# remove last 6 rows NA data
+df21 <- head(df21, - 6)
+# fix two numbers
+df21[df21$three_fga== -9, "three_fga"] <- 9
+df20[df20$three_fga == -7, "three_fga"] <- 7
+```
+
 
 # Three Point Shooting `r emoji("basketball")`
 
-<span style="color:black"> In order to stay relevant at any level of basketball teams need to be able to shoot the ball well, especially from beyond the arc. </span> 
+<span style="color:black"> The three point shot has taken basketball, at every level, by storm over the last decade or so. It seems that the teams that are able to compete are the ones team cashing in on this valuable shot beyond the arc.  </span> 
 
-<span style="color:orange"> **Idaho State** </span> <span style="color:black"> ranked 9th out of 11 teams in the Big Sky conference for 3pt shooting percentage during the 2020-21 season at 33.3% on almost 21 attempts per game. </span>
+<span style="color:orange"> **Idaho State** </span> <span style="color:black"> ranked 9th out of 11 teams in the Big Sky conference for 3pt shooting percentage during the 2020-21 season at 33.3% on almost 21 attempts per game. Also, the <span style="color:orange"> **Bengals** </span> ranked 8th out of 11 teams in 3 point field goals made per game. </span>
 
-<span style="color:black"> Three point shooting is not the only thing that helps a team win, but it has become a relevant factor. The top 3 finishers in the Big Sky conference standings ranked 2nd, 3rd, and 4th, in 3pt FG makes per game in 2020-21 season. Now, I'm not suggesting their shooting prowess was *the* reason they had great success during conference play, but it is intriguing relationship. </span>
+<span style="color:black"> Three point shooting is not the only thing that helps a team win, but it has become an important factor. The top 3 finishers in the Big Sky conference standings ranked 2nd, 3rd, and 4th, in 3pt FG makes per game in 2020-21 season. Now, I'm not suggesting their shooting prowess was *the* reason they had great success during conference play, but it is intriguing relationship. </span>
 
 
 <br>
@@ -62,25 +103,19 @@ df21$three_fga <- as.numeric(df21$three_fga)
 
 <span style="color:black"> I was tasked with tracking and recording (and later visualizing and analyzing) tens of thousands of three point shots over the course of the summer. <span style="color:orange"> **ISU's** </span> players devoted dozens of hours in the gym with one goal: **get better at shooting the 3 ball**. </span> 
 
-* <span style="color:red"> **Spoiler Alert:** </span> <span style="color:black"> Although most players saw an [increase in performance](https://daisydaines.github.io/isu_mbb/summer_charts/) over the course of the summer, the team as whole did not improve three point shooting during the subsequent 2021-22 season compared with the previous season `r emoji("disappointed")`</span>
+* <span style="color:red"> **Spoiler Alert:** </span> <span style="color:black"> Although all players saw an [increase in performance](https://daisydaines.github.io/isu_mbb/summer_charts/) over the course of the summer, the team did not improve overall three point shooting during the subsequent 2021-22 season compared with the previous two seasons. `r emoji("disappointed")`</span>
 
 <br>
 
 
 ```{r, include=FALSE}
-#model <- lm(running_pct ~ game, df21)
-#predictDf <- data.frame(game = 25:30)
-#predictDf$running_pct <- predict(model, predictDf)
-
+# build simple linear model to predict final six games for COVID shortened season
 model <- lm(three_fg ~ three_fga, df21)
-pred_df <- data.frame(#three_fg = floor(runif(6, min= min(df21$three_fg), max= max(df21$three_fg))), 
-                         three_fga = floor(runif(6, min= min(df21$three_fga), max= max(df21$three_fga))), 
-                         #three_pct = three_fg / three_fga, 
-                         #running_pct = round(cumsum(three_fg) / cumsum(three_fga), 3) * 100, 
+# build df
+pred_df <- data.frame(three_fga = floor(runif(6, min= min(df21$three_fga), max= max(df21$three_fga))), 
                          game = 25:30)
+# add predicted numbers
 pred_df$three_fg <- predict(model, pred_df)
-
-
 ```
 
 
@@ -89,27 +124,30 @@ pred_df$three_fg <- predict(model, pred_df)
 # add original columns to later bind
 str(pred_df)
 pred_df$three_pct <- pred_df$three_fg / pred_df$three_fga
-#pred_df$running_pct <- round(cumsum(pred_df$three_fg) / cumsum(pred_df$three_fga), 3) * 100
 ```
 
 
 ```{r, include=FALSE}
+# reorder columns to match for rbind
 colnames(pred_df)
 pred_df <- pred_df[,c(3,1,4,2)]
 ```
 
+
 ```{r, include=FALSE}
-# rbind
+# rbind predictions with df21
 df21 <- rbind(df21, pred_df)
 ```
 
 
 ```{r, include=FALSE}
+# add running percentage for entire season 
 df21 <- df21 %>% mutate(running_pct = round(cumsum(three_fg) / cumsum(three_fga), 3) * 100)
 ```
 
 
 ```{r, include=FALSE}
+# rename and reorder df22 columns
 colnames(df22)
 df22 <- df22[, c(1,2,3,5,4)]
 
@@ -118,39 +156,40 @@ df22 <- df22 %>% rename(
   three_fga = three_attempts,
   three_pct = pct
 )
-
 ```
 
 
 ```{r, include=FALSE}
+# add column for season to group by in ggplot
+df20$season <- "2019-20"
 df21$season <- "2020-21"
 df22$season <- "2021-22"
-
-dfall <- rbind(df21, df22)
+# bind all dfs for dfall
+dfall <- rbind(df20, df21, df22)
 ```
 
 
 
 ```{r, include=FALSE}
-#subset(dfall, game>= 25 & season == "2020-21")
-
+# ggplot: line chart colored by season
 three <- ggplot(dfall, aes(x=game, y=running_pct, group=season), size = 1.5) +
   geom_line(aes(color=season), size= 1) + 
   theme_minimal() + 
   labs(y = "Running 3pt Percentage", 
        x= "Game")
-
-three <- three + scale_color_manual(breaks = c("2020-21", "2021-22"),
-                        values=c("orange", "black"))
+# add relevant ISU colors
+three <- three + scale_color_manual(breaks = c("2019-20", "2020-21", "2021-22"),
+                        values=c("gray", "orange", "black"))
 ```
 
 
 # Season Comparison
 
 ```{r, echo=FALSE, dpi = 200}
+# remove grid lines and make outer lines black for simple looks
 three <- three + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
-
+# print plot
 print(three)
 ```
 
