@@ -1,5 +1,6 @@
 ---
 title: "UVU Offense"
+date: "May 10, 2021"
 output: 
   prettydoc::html_pretty:
     theme: architect
@@ -122,34 +123,77 @@ table(half_court$passes)
 ```
 
 
+# Ball Movement and Scoring 
+
+<span style="color:black"> During the 2020-21 season the <span style="color:green"> **Utah Valley Wolverines** </span> ran a motion offense that regularly moved the ball from one side of the court to the other and back. When timing was right and ball screen, cuts, and specific actions were executed the offense worked well. </span>
+
+<span style="color:black"> This motion offense begged the question: Was all the side to side movement and passing really one of the reasons for the offensive success? </span>
+
+<span style="color:black"> A quick analysis might help us find out. </span>
+
+<br>
+
+# The Gathering 
+
+<span style="color:black"> Conference play started in January 2021 and I was asked to record each offensive possession and tally </span>
+
+  * <span style="color:black"> the number of passes once was the ball was in the half court. </span>
+  * <span style="color:black"> the number of times the ball switched sides of the half court. </span>
+
+<span style="color:black"> These two stats are not tracked on ESPN or any college basketball platform that I am aware of so I would re-watch each game and manually track these occurrences. </span>
+
+<br>
+
+# The Visuals
+
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, dpi = 200}
-ggplot(half_court, aes(x=passes)) +
+pass_bar <- ggplot(half_court, aes(x=passes)) +
   geom_bar(color="black", fill="dark green") +
   theme_minimal() +
   xlab("\nNumber of Passes") +
   ylab("Number of Possessions\n") +
-  ggtitle("Passes on Offensive Possessions\n",
-          subtitle = "Conference Games 2020-21 Season") +
+  #ggtitle("Passes on Offensive Possessions\n",
+          #subtitle = "Conference Games 2020-21 Season") +
   theme(plot.title = element_text(size = 26, face = "bold"),
         plot.subtitle = element_text(vjust = 14.0)) +
   theme(axis.text=element_text(size=12), 
         axis.title = element_text(size=14))
 ```
 
-___
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, dpi = 200}
-ggplot(half_court, aes(x=sides)) +
+sides_bar <- ggplot(half_court, aes(x=sides)) +
   geom_bar(color="black", fill="dark green") +
   theme_minimal() +
   xlab("\nNumber of Sides") +
   ylab("Number of Possessions\n") +
-  ggtitle("Sides on Offensive Possessions\n",
-          subtitle = "Conference Games 2020-21 Season") +
+  #ggtitle("Sides on Offensive Possessions\n",
+          #subtitle = "Conference Games 2020-21 Season") +
   theme(plot.title = element_text(size = 26, face = "bold"),
         plot.subtitle = element_text(vjust = 14.0)) +
   theme(axis.text=element_text(size=12), 
         axis.title = element_text(size=14))
+```
+
+### Passing
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, dpi = 200}
+pass_bar <- pass_bar + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+
+pass_bar
+```
+
+<br>
+
+### Ball Movement
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, dpi = 200}
+sides_bar <- sides_bar + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+
+sides_bar
 ```
 
 
@@ -194,17 +238,15 @@ str(ppp)
 ```
 
 
-___
-
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, dpi = 200}
-ggplot(ppp, aes(x=passes, y=ppp)) +
+pass_ppp <- ggplot(ppp, aes(x=passes, y=ppp)) +
   geom_point(color="dark green") +
   geom_smooth(method = "lm", fill=NA, color="black") +
   theme_minimal() +
   xlab("\nNumber of Passes") +
   ylab("Points Per Possessions\n") +
-  ggtitle("PPP vs. Passes\n",
-            subtitle = "Conference Games 2020-21 Season") +
+  #ggtitle("PPP vs. Passes\n",
+            #subtitle = "Conference Games 2020-21 Season") +
   theme(plot.title = element_text(size = 26, face = "bold"),
         plot.subtitle = element_text(vjust = 14.0)) +
   theme(axis.text=element_text(size=12), 
@@ -236,25 +278,49 @@ ppp_sides <- data.frame(sides = c(1, 2, 3, 4, 5),
 
 ```
 
-___
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, dpi = 200}
-ggplot(ppp_sides, aes(x=sides, y=ppp_sides)) +
+sides_ppp <- ggplot(ppp_sides, aes(x=sides, y=ppp_sides)) +
   geom_point(color="dark green") +
   geom_smooth(method = "lm", fill=NA, color="black") +
-  theme_minimal() +
+  theme_minimal() + 
   xlab("\nNumber of Sides") +
-  ylab("Points Per Possessions\n") +
-  ggtitle("PPP vs. Sides\n",
-          subtitle = "Conference Games 2020-21 Season") +
-  theme(plot.title = element_text(size = 26, face = "bold"),
-        plot.subtitle = element_text(vjust = 14.0)) +
-  theme(axis.text=element_text(size=12), 
-        axis.title = element_text(size=14))
+  ylab("Points Per Possessions\n") #+
+  #ggtitle("PPP vs. Sides\n",
+          #subtitle = "Conference Games 2020-21 Season") +
+  #theme(plot.title = element_text(size = 26, face = "bold"),
+        #plot.subtitle = element_text(vjust = 14.0)) +
+  #theme(axis.text=element_text(size=12), 
+        #axis.title = element_text(size=14))
 ```
 
-___
 
+# The Scoring
+
+<br>
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+pass_ppp <- pass_ppp + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+
+pass_ppp
+```
+
+
+<br>
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+sides_ppp <- sides_ppp + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+
+sides_ppp
+```
+
+<br>
+
+# Quick Takeaways
+
+* <span style="color:black"> Interesting that on average an odd number of passes results in more points per possession. </span>
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 #points per play

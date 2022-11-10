@@ -194,3 +194,15 @@ print(three)
 ```
 
 
+# Quick Thoughts
+
+* <span style="color:black"> The difference between 33% and 31% may seem trivial, but 2% on almost 700 3pt attempts during the season adds up quickly. </span>
+
+* <span style="color:black"> Finishing above 33% for the 2021-22 season would have meant making 15+ more threes. That's an extra three pointer every other game. </span>
+
+* <span style="color:orange"> **Idaho State** </span> <span style="color:black"> finished the season 7-23. </span>
+    * <span style="color:black"> 10 of the 23 losses came by fewer than 9 points </span>
+    * <span style="color:black"> 6 of those 10 single digit losses were by 5 points or fewer.  </span>
+
+* <span style="color:black"> An extra three here or there might have been the difference between a dismal 7-23 season or an ok 13-17 season `r emoji("pensive")` </span>
+
