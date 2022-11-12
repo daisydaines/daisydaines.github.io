@@ -13,13 +13,12 @@ pagetitle: Austin Daines
 
 <center>
 
-[![GMail](Images/gmail.png "Email me"){ height=40%, width=40% }](mailto:austin@daines.net)
+![](../../this_is_me/KHDaines-44.jpg "yaboi"){height=50%, width=50%}
 
-[![Linkedin](Images/linkedin.png "Austin Daines Linkedin Profile"){align=center, height=40%, width=40% }](https://www.linkedin.com/in/austin-daines-2766a4217/)
-
-[![Github](Images/github.png "Github Repo"){ height=40%, width=40% }](https://github.com/daisydaines)
-
-[![twitter](Images/twitter.png "@daisydaines Twitter"){ height=40%, width=40% }](https://twitter.com/daisydaines)
+[![GMail](Images/gmail.png "Email me"){ height=12%, width=12% }](mailto:austin@daines.net) 
+[![Linkedin](Images/linkedin.png "Austin Daines Linkedin Profile"){height=10%, width=10% }](https://www.linkedin.com/in/austin-daines-2766a4217/) 
+[![Github](Images/github.png "Github Repo"){ height=10%, width=10% }](https://github.com/daisydaines)
+[![twitter](Images/twitter.png "@daisydaines Twitter"){ height=10%, width=10% }](https://twitter.com/daisydaines)
 
 </center>
 
@@ -36,6 +35,7 @@ pagetitle: Austin Daines
 </div>
 
 </div>
+
 
 ```{r, message=FALSE, echo=TRUE, warning=FALSE, include=FALSE}
 library(knitr)

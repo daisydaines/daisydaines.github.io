@@ -7,7 +7,7 @@ pagetitle: Austin Daines
 ---
 ___
 
-## About Me
+## About Me 
 
 [Resume](https://daisydaines.github.io/resume/){target="_blank"}
 
@@ -34,13 +34,13 @@ ___
 
 ## Projects 
 
-NCAA Men's Basketball [Transfer Portal](https://daisydaines.github.io/portal/) (coming soon)
-
 <span style= "color:orange"> **Idaho State University** [Men's Basketball](https://daisydaines.github.io/isu_mbb/) </span>
 
 <span style= "color:green"> **Utah Valley University** [Men's Basketball](https://daisydaines.github.io/uvu_mbb/) </span>
 
 [NBA Shot Charts](https://daisydaines.github.io/NBA_shot_charts/)
+
+NCAA Men's Basketball [Transfer Portal](https://daisydaines.github.io/portal/) (coming soon)
 
 ___
 

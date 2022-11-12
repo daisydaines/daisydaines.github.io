@@ -127,7 +127,7 @@ table(half_court$passes)
 
 <span style="color:black"> During the 2020-21 season the <span style="color:green"> **Utah Valley Wolverines** </span> ran a motion offense that regularly moved the ball from one side of the court to the other and back. When timing was right and ball screen, cuts, and specific actions were executed the offense worked well. </span>
 
-<span style="color:black"> This motion offense begged the question: Was all the side to side movement and passing really one of the reasons for the offensive success? </span>
+<span style="color:black"> This motion offense begged the question: *Was all the side to side movement and passing contributing to offensive success?* </span>
 
 <span style="color:black"> A quick analysis might help us find out. </span>
 
@@ -240,7 +240,7 @@ str(ppp)
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, dpi = 200}
 pass_ppp <- ggplot(ppp, aes(x=passes, y=ppp)) +
-  geom_point(color="dark green") +
+  geom_point(color="dark green", size = 2.5) +
   geom_smooth(method = "lm", fill=NA, color="black") +
   theme_minimal() +
   xlab("\nNumber of Passes") +
@@ -281,7 +281,7 @@ ppp_sides <- data.frame(sides = c(1, 2, 3, 4, 5),
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, dpi = 200}
 sides_ppp <- ggplot(ppp_sides, aes(x=sides, y=ppp_sides)) +
-  geom_point(color="dark green") +
+  geom_point(color="dark green", size = 2.5) +
   geom_smooth(method = "lm", fill=NA, color="black") +
   theme_minimal() + 
   xlab("\nNumber of Sides") +
@@ -299,9 +299,13 @@ sides_ppp <- ggplot(ppp_sides, aes(x=sides, y=ppp_sides)) +
 
 <br>
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+### Passing vs. PPP
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=TRUE, dpi = 200}
 pass_ppp <- pass_ppp + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+
+pass_ppp <- pass_ppp + scale_x_discrete(limits=c("1","2", "3", "4", "5", "6", "7", "8", "9", "10"))
 
 pass_ppp
 ```
@@ -309,7 +313,11 @@ pass_ppp
 
 <br>
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+
+### Ball Movement vs. PPP
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=TRUE, dpi = 200}
 sides_ppp <- sides_ppp + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 
@@ -320,7 +328,10 @@ sides_ppp
 
 # Quick Takeaways
 
-* <span style="color:black"> Interesting that on average an odd number of passes results in more points per possession. </span>
+* <span style="color:black"> On average an odd number of passes yielded more points per possession than an even number of passes. </span>
+
+* <span style="color:black"> The number of sides displayed an nice bell-like curve in points per possession. </span>
+
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 #points per play
