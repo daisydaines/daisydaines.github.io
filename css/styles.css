@@ -575,6 +575,7 @@ progress {
 
 .list-inline-item {
   display: inline-block;
+  text-align: center;
 }
 .list-inline-item:not(:last-child) {
   margin-right: 0.5rem;
@@ -10948,6 +10949,17 @@ p.lead {
 
 .dev-icons {
   font-size: 3rem;
+  display: block;
+}
+
+.dev-icons span{
+  color:#6c757d;
+  font-size:10px;
+  padding:5px 0 10px 0;
+  display:block;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  text-align: center;
 }
 
 section.resume-section {
